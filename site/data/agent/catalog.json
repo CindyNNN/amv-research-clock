@@ -1,19 +1,19 @@
 {
   "schema_version": 1,
   "data_product": "amv_research_catalog",
-  "generated_at_utc": "2026-08-14T14:23:49Z",
+  "generated_at_utc": "2026-08-14T14:47:56Z",
   "language": [
     "zh-CN"
   ],
   "disclaimer": "研究辅助，不是投资建议。",
-  "disclaimer_long": "本站所有净值、仓位、超额与图表仅供研究观察，不构成投资建议、收益承诺或交易指令。不代客下单，不索取券商账号。",
-  "site_name": "创业板 0AMV 研究时钟",
+  "disclaimer_long": "这里的净值、仓位、图表只供自己复盘看，不是投资建议，也不保证以后还能这样。不会帮你下单，也不会要券商账号。",
+  "site_name": "创业板研究观察",
   "github_repo": "CindyNNN/amv-research-clock",
   "pages_url": "https://cindynnn.github.io/amv-research-clock/",
-  "expected_update": "每个交易日北京时间 20:00 左右",
-  "amv_phone_workflow": "点页面右上角「录入 0AMV」，填收盘价后用仓库所有者 GitHub 账号提交 Issue；Actions 会写入并更新网页。",
+  "expected_update": "每个交易日晚上八点左右",
+  "amv_phone_workflow": "在创业板这一页点右上角「录入 0AMV」，填收盘价后用仓库所有者的 GitHub 账号提交；大约一两分钟后刷新网页就能看到。",
   "banners": [
-    "同花顺情绪刷新失败，沿用仓库内 combined CSV：无法加载指南针0AMV日线（/home/runner/work/amv-research-clock/amv-research-clock/data/compass/0amv_daily.csv）：找不到 0AMV 日线: /home/runner/work/amv-research-clock/amv-research-clock/data/compass/0amv_daily.csv"
+    "市场情绪已按收盘尽量刷新。"
   ],
   "freshness": {
     "amv_as_of": "2026-08-14",
@@ -26,21 +26,37 @@
     "amv_stale": false,
     "emotion_stale": false
   },
+  "pages": [
+    {
+      "id": "cyb",
+      "tab": "创业板指数策略"
+    },
+    {
+      "id": "rotation",
+      "tab": "板块轮动策略",
+      "agent_url": "data/agent/sector-rotation.json"
+    },
+    {
+      "id": "flow",
+      "tab": "板块资金流入",
+      "agent_url": "data/agent/theme-fund-flow.json"
+    }
+  ],
   "indices": [
     {
       "key": "cyb-clock",
-      "tab": "创业板 0AMV 满仓",
-      "index_name_cn": "创业板 0AMV 满仓",
-      "rule": "amv_emo70_ma60",
-      "role": "live_clock",
+      "tab": "满仓",
+      "index_name_cn": "创业板满仓",
+      "rule": "满仓进出",
+      "role": "live",
       "agent_url": "data/agent/cyb-clock.json",
       "full_series_url": "data/cyb-clock.json"
     },
     {
       "key": "cyb-committee",
-      "tab": "五份离场委员会",
-      "index_name_cn": "五份离场委员会",
-      "rule": "sleeves_emo_50_70",
+      "tab": "五份仓",
+      "index_name_cn": "五份仓观察",
+      "rule": "五份仓",
       "role": "observation",
       "agent_url": "data/agent/cyb-committee.json",
       "full_series_url": "data/cyb-committee.json"

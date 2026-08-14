@@ -37,6 +37,9 @@ from ai_invest_advisor.amv_index_data import (
 )
 from ai_invest_advisor.cyb_emotion_amv_combo import CombinedRule, apply_combined_rule, load_emotion_frame
 from ai_invest_advisor.cyb_market_data import add_indicators, load_complete_history
+from ai_invest_advisor.sector_etf_rotation import RotRule, rotate
+from ai_invest_advisor.sector_etf_universe import SECTOR_ETF_UNIVERSE
+from ai_invest_advisor.site_fund_flow import refresh_theme_flow
 
 ROOT = Path(__file__).resolve().parents[2]
 SITE_DIR = ROOT / "site"
@@ -68,8 +71,21 @@ OVERLAYS: tuple[IndexSpec, ...] = (
 ETF_SPEC = OVERLAYS[-1]
 DISCLAIMER = "研究辅助，不是投资建议。"
 DISCLAIMER_LONG = (
-    "本站所有净值、仓位、超额与图表仅供研究观察，不构成投资建议、"
-    "收益承诺或交易指令。不代客下单，不索取券商账号。"
+    "这里的净值、仓位、图表只供自己复盘看，不是投资建议，也不保证以后还能这样。"
+    "不会帮你下单，也不会要券商账号。"
+)
+DEFAULT_RISK_NOTES = [
+    "回测里按单边千分之一算了费用，过去的结果不代表以后也能赚到。",
+    "0AMV 要自己从指南针抄收盘价过来，网站不会自动算。",
+    "信号按当天收盘确认，第二天开盘才成交；最后一天的仓位按收盘估算。",
+    DISCLAIMER,
+]
+ROT_RULE = RotRule(
+    name="m120_k2_raw_gate",
+    lookback=120,
+    top_k=2,
+    skip_negative=False,
+    use_gate=True,
 )
 
 
@@ -128,9 +144,9 @@ def try_refresh_emotion(*, as_of: date, banners: list[str]) -> pd.DataFrame:
     now = datetime.now()
     try:
         load_complete_history(as_of=as_of, now=now, mode="close")
-        banners.append("情绪数据已尝试用同花顺涨跌分布刷新。")
+        banners.append("市场情绪已按收盘尽量刷新。")
     except Exception as exc:
-        banners.append(f"同花顺情绪刷新失败，沿用仓库内 combined CSV：{exc}")
+        banners.append(f"市场情绪今天没刷上，仍用仓库里上一份。原因：{exc}")
     emotion = load_emotion_frame()
     return emotion
 
@@ -254,9 +270,9 @@ def live_position(daily: pd.DataFrame, *, n_units: int = 5) -> dict[str, Any]:
     note = ""
     action = str(last.get("action", ""))
     if action == "schedule_entry":
-        note = "已发出入场信号，次日开盘成交"
+        note = "今天收盘确认买入，明天开盘才会成交"
     elif action == "schedule_exit":
-        note = "已发出离场信号，次日开盘成交"
+        note = "今天收盘确认卖出，明天开盘才会成交"
     return {
         "units": units,
         "n": n_units,
@@ -297,6 +313,58 @@ def overlay_nav_frame(price: pd.DataFrame, dates: pd.Series) -> pd.DataFrame:
     )
     aligned["nav"] = aligned["nav"].ffill()
     return aligned
+
+
+def strategy_nav_overlay(daily: pd.DataFrame, dates: pd.Series) -> pd.DataFrame:
+    frame = pd.DataFrame(
+        {
+            "date": pd.to_datetime(daily["date"]).dt.normalize(),
+            "nav": rebase_to_nav(daily["equity"]),
+        }
+    )
+    wanted = pd.to_datetime(dates).dt.normalize()
+    aligned = pd.DataFrame({"date": wanted}).merge(frame, on="date", how="left")
+    aligned["nav"] = aligned["nav"].ffill()
+    for col in ("open", "high", "low", "close"):
+        aligned[col] = float("nan")
+    return aligned
+
+
+def sector_etf_lookup() -> dict[str, Any]:
+    return {item.spec.code: item for item in SECTOR_ETF_UNIVERSE}
+
+
+def rotation_holdings(daily: pd.DataFrame) -> dict[str, Any]:
+    if daily.empty:
+        return {"as_of": None, "last_rebalance": None, "empty": True, "rows": []}
+    last = daily.iloc[-1]
+    codes = [code for code in str(last.get("held") or "").split(",") if code]
+    traded = daily.copy()
+    if "traded" in traded.columns:
+        traded = traded[pd.to_numeric(traded["traded"], errors="coerce").fillna(0).eq(1)]
+    else:
+        traded = traded.iloc[0:0]
+    last_change = _iso(traded.iloc[-1]["date"]) if not traded.empty else None
+    weight = 1.0 / len(codes) if codes else 0.0
+    lookup = sector_etf_lookup()
+    rows = []
+    for code in codes:
+        item = lookup.get(code)
+        rows.append(
+            {
+                "code": code,
+                "name": item.spec.name if item else code,
+                "theme": item.theme if item else "",
+                "note": item.proxy_note if item else "",
+                "weight": weight,
+            }
+        )
+    return {
+        "as_of": _iso(last["date"]),
+        "last_rebalance": last_change,
+        "empty": not rows,
+        "rows": rows,
+    }
 
 
 def build_frame(
@@ -359,6 +427,10 @@ def strategy_payload(
     methodology: dict[str, Any],
     observation_only: bool = False,
     n_units: int = 5,
+    headline: str = "",
+    default_benchmark: str = "sz159915",
+    extra: dict[str, Any] | None = None,
+    risk_notes: list[str] | None = None,
 ) -> dict[str, Any]:
     nav = rebase_to_nav(daily["equity"])
     dates = pd.to_datetime(daily["date"])
@@ -392,7 +464,7 @@ def strategy_payload(
         yearly[spec_key] = yearly_excess(strat_nav, bench)
     dd = max_drawdown_span(nav, dates)
     position = live_position(daily, n_units=n_units)
-    return {
+    payload = {
         "schema_version": 1,
         "data_product": "amv_research_index",
         "disclaimer": DISCLAIMER,
@@ -408,6 +480,7 @@ def strategy_payload(
             "base_date": _iso(dates.iloc[0]),
             "base_point": NAV_BASE,
             "observation_only": observation_only,
+            "headline": headline,
         },
         "freshness": {
             "amv_as_of": status.amv_as_of,
@@ -418,9 +491,9 @@ def strategy_payload(
             "overlay_as_of": status.overlay_as_of,
             "amv_stale": status.amv_stale,
             "emotion_stale": status.emotion_stale,
-            "expected_update": "每个交易日北京时间 20:00 左右（GitHub Actions 12:00 UTC）",
+            "expected_update": "每个交易日晚上八点左右更新",
         },
-        "banners": status.banners,
+        "banners": [],
         "performance": {
             "latest_point": float(nav.iloc[-1]),
             "annualized_return": float(summary["annualized_return"]),
@@ -438,17 +511,125 @@ def strategy_payload(
         "position": position,
         "overlays": overlay_meta,
         "overlay_series": overlay_json,
-        "default_benchmark": "sz159915",
+        "default_benchmark": default_benchmark,
         "yearly_excess": yearly,
         "series": series,
         "methodology": methodology,
-        "risk_notes": [
-            "历史回测含手续费假设（单边 10bp），不代表未来可实现收益。",
-            "0AMV 无法在 GitHub 自动计算，需手机 Actions 手工粘贴收盘价。",
-            "收盘确认、次日开盘成交；样本末日持仓按收盘盯市。",
-            DISCLAIMER,
-        ],
+        "risk_notes": list(risk_notes or DEFAULT_RISK_NOTES),
     }
+    if extra:
+        payload.update(extra)
+    return payload
+
+
+def build_rotation_json(
+    *,
+    clock_daily: pd.DataFrame,
+    overlay_frames: dict[str, pd.DataFrame],
+    status: BuildStatus,
+    force_download: bool,
+    price_end: date,
+    strategy_end: date,
+) -> dict[str, Any]:
+    rot_banners: list[str] = []
+    prices: dict[str, pd.DataFrame] = {}
+    if "sz159915" in overlay_frames:
+        prices["159915"] = overlay_frames["sz159915"]
+    for item in SECTOR_ETF_UNIVERSE:
+        if item.spec.code == "159915":
+            continue
+        frame = download_with_fallback(
+            item.spec, start=START, end=price_end, force=force_download, banners=rot_banners
+        )
+        if frame is None or frame.empty:
+            continue
+        prices[item.spec.code] = frame
+    if len([code for code in prices if code != "159915"]) < 2:
+        rot_banners.append("行业 ETF 行情不够，轮动对照暂时画不出来。")
+    result = rotate(prices, clock_daily, rule=ROT_RULE, cost=COST)
+    rot_daily = result["daily"].copy()
+    rot_daily["position"] = rot_daily["n_held"] / float(ROT_RULE.top_k)
+    rot_daily["units"] = rot_daily["n_held"]
+    rot_sum = summarize_backtest(
+        rot_daily,
+        pd.DataFrame(),
+        cost=COST,
+        code="sector-rotation",
+        name="板块轮动",
+        tencent_symbol="",
+    )
+    rot_overlays: dict[str, pd.DataFrame] = {
+        "cyb-clock": strategy_nav_overlay(clock_daily, rot_daily["date"]),
+    }
+    rot_overlay_meta: list[dict[str, str]] = [
+        {"key": "cyb-clock", "code": "", "name": "创业板满仓策略"},
+    ]
+    wanted = {
+        "sh000001": "上证指数",
+        "sz399001": "深证成指",
+        "sz159915": "创业板ETF",
+    }
+    for key, name in wanted.items():
+        if key not in overlay_frames:
+            continue
+        rot_overlays[key] = overlay_nav_frame(overlay_frames[key], rot_daily["date"])
+        code = next((spec.code for spec in OVERLAYS if spec.tencent_symbol == key), "")
+        rot_overlay_meta.append({"key": key, "code": code, "name": name})
+    holdings = rotation_holdings(rot_daily)
+    clock_nav = float(rebase_to_nav(clock_daily["equity"]).iloc[-1])
+    rot_nav = float(rebase_to_nav(rot_daily["equity"]).iloc[-1])
+    vs_clock = None if clock_nav <= 0 else rot_nav / clock_nav - 1.0
+    method = {
+        "怎么选": "创业板有仓的时候，按过去 120 个交易日涨幅，等权拿前两名行业 ETF，每月换一次。",
+        "怎么成交": "按昨天收盘排名，今天开盘买。创业板空仓时，这边也不拿板块。",
+        "备选 ETF": (
+            "半导体、芯片、设备、通信、机器人、工业母机、军工、稀土、有色、人工智能等。"
+            "有的只是近似：通信 ETF 不等于纯 CPO，人工智能 ETF 不等于纯液冷，"
+            "军工 ETF 不等于纯商业航天，有色 ETF 不等于纯小金属。"
+        ),
+        "怎么看": "这是对照观察，日常仍看创业板那一页。按年检验下来，多数年份只略好一点点。",
+        "费用": "每次换仓按单边千分之一计。",
+        "窗口": f"{START.isoformat()} 到 {strategy_end.isoformat()}",
+    }
+    payload = strategy_payload(
+        key="sector-rotation",
+        name="板块轮动对照",
+        name_en="Sector rotation overlay",
+        rule_name="创业板有仓才选板块",
+        daily=rot_daily,
+        summary=rot_sum,
+        overlays=rot_overlays,
+        overlay_meta=rot_overlay_meta,
+        status=status,
+        methodology=method,
+        observation_only=True,
+        n_units=ROT_RULE.top_k,
+        headline="这是对照观察，日常仍看创业板这一页",
+        default_benchmark="cyb-clock",
+        extra={
+            "holdings": holdings,
+            "hide_kline": True,
+            "default_overlays": ["cyb-clock", "sh000001"],
+            "page": "rotation",
+        },
+        risk_notes=[
+            "有的 ETF 只是主题近似，不是纯板块。",
+            "按年检验下来，多数年份只略好一点点，不适合当成日常主仓。",
+            *DEFAULT_RISK_NOTES,
+        ],
+    )
+    payload["performance"]["vs_cyb_clock"] = vs_clock
+    payload["banners"] = rot_banners
+    if holdings["empty"]:
+        payload["position"]["label"] = "空仓"
+        payload["position"]["note"] = "创业板有仓才选板块。"
+    else:
+        payload["position"]["label"] = "、".join(row["name"] for row in holdings["rows"])
+        last_change = holdings.get("last_rebalance")
+        payload["position"]["note"] = (
+            f"最近一次换仓 {last_change}，两只等权。" if last_change else "两只等权。"
+        )
+    return payload
 
 
 def copy_static_site(site_dir: Path = SITE_DIR) -> None:
@@ -475,8 +656,8 @@ def build_site(
         as_of = amv_date or beijing_today()
         result = append_amv_close(as_of=as_of, close=float(amv_close), source="github_workflow")
         banners.append(
-            f"已写入 0AMV {result['date']} close={result['close']:.2f}"
-            + ("（与上一有效日收盘相同，不作为新信号）" if result["duplicate_close"] else "")
+            f"已记下 0AMV {result['date']} 收盘 {result['close']:.2f}"
+            + ("（和上一有效日一样，仓位不会变）" if result["duplicate_close"] else "")
         )
     amv = load_cloud_amv()
     trusted = trusted_amv_frame(amv)
@@ -487,8 +668,8 @@ def build_site(
     dupes = duplicate_tail_dates(amv)
     if dupes:
         banners.append(
-            f"{'、'.join(dupes)} 的 0AMV 收盘与前一日相同，不作为有效信号；"
-            f"策略序列截至 {trusted_end.isoformat()}。"
+            f"{'、'.join(dupes)} 的 0AMV 收盘和前一天相同，不当新信号；"
+            f"策略仍算到 {trusted_end.isoformat()}。"
         )
     emotion = try_refresh_emotion(as_of=beijing_today(), banners=banners)
     emotion_last = pd.Timestamp(emotion["date"].max()).date()
@@ -515,13 +696,11 @@ def build_site(
     if amv_stale:
         banners.insert(
             0,
-            f"今日 0AMV 未更新，信号沿用上一有效日 {trusted_end.isoformat()}。"
-            "指数/ETF 对比层仍刷新到各自最新日期。",
+            f"今天的 0AMV 还没更新，信号仍按上一有效日 {trusted_end.isoformat()}。"
+            "上证、深成这些对比线会继续刷到最新。",
         )
     if emotion_stale:
-        banners.append(
-            f"情绪序列截至 {emotion_last.isoformat()}，可能落后于行情。"
-        )
+        banners.append(f"市场情绪数据停在 {emotion_last.isoformat()}，可能比行情慢一拍。")
 
     status = BuildStatus(
         banners=banners,
@@ -582,29 +761,28 @@ def build_site(
         )
 
     clock_method = {
-        "underlying": "创业板 ETF 159915",
-        "rule": "amv_emo70_ma60",
-        "entry": "0AMV 两日涨跌幅之和 > 3%，收盘确认、次日开盘满仓买入",
-        "exit": "市场情绪 ≥ 70 离场；若标的收盘价在 MA60 上方则忽略该次离场",
-        "position": "二元满仓/空仓，不慢加仓",
-        "cost": "单边 10bp",
-        "window": f"{START.isoformat()} 至 {strategy_end.isoformat()}",
-        "interpretation": DISCLAIMER_LONG,
+        "标的": "创业板 ETF（159915）",
+        "怎么进出": "0AMV 两日涨幅加起来超过 3% 就进；市场情绪到 70 就出。如果价格还在 60 日均线上方，这次离场先不算。",
+        "仓位": "要么满仓，要么空仓，不慢慢加。",
+        "成交": "当天收盘确认，第二天开盘成交。",
+        "费用": "单边千分之一。",
+        "窗口": f"{START.isoformat()} 到 {strategy_end.isoformat()}",
+        "说明": DISCLAIMER_LONG,
     }
     committee_method = {
-        "underlying": "创业板 ETF 159915",
-        "rule": "五份独立袖，入场同 0AMV，离场线 50/55/60/65/70，等权平均",
-        "note": "观察仓位，不替代满仓时钟。日频/月频行业轮动不作为替代方案推广。",
-        "cost": "单边 10bp（按成交份额计）",
-        "window": f"{START.isoformat()} 至 {strategy_end.isoformat()}",
-        "interpretation": DISCLAIMER_LONG,
+        "标的": "创业板 ETF（159915）",
+        "怎么做": "五份仓一起看：进场都看 0AMV，离场线分别是情绪 50、55、60、65、70，最后取平均仓位。",
+        "怎么看": "只作观察，日常仍看满仓那一页。",
+        "费用": "单边千分之一。",
+        "窗口": f"{START.isoformat()} 到 {strategy_end.isoformat()}",
+        "说明": DISCLAIMER_LONG,
     }
 
     clock_json = strategy_payload(
         key="cyb-clock",
-        name="创业板 0AMV 满仓",
-        name_en="ChiNext 0AMV Full-Lot Clock",
-        rule_name="amv_emo70_ma60",
+        name="创业板满仓",
+        name_en="ChiNext full-lot",
+        rule_name="满仓进出",
         daily=clock_daily,
         summary=clock_sum,
         overlays=overlay_aligned,
@@ -612,12 +790,13 @@ def build_site(
         status=status,
         methodology=clock_method,
         n_units=5,
+        headline="日常跟仓看这一页",
     )
     committee_json = strategy_payload(
         key="cyb-committee",
-        name="五份离场委员会",
-        name_en="Five-Tranche Emotion Committee",
-        rule_name="sleeves_emo_50_70",
+        name="五份仓观察",
+        name_en="Five-sleeve overlay",
+        rule_name="五份仓",
         daily=committee,
         summary=committee_sum,
         overlays=overlay_aligned,
@@ -626,6 +805,7 @@ def build_site(
         methodology=committee_method,
         observation_only=True,
         n_units=5,
+        headline="只作观察，日常仍看满仓那一页",
     )
 
     etf_ohlc = ohlc_records(
@@ -637,6 +817,16 @@ def build_site(
     clock_json["etf_ohlc"] = etf_ohlc
     committee_json["etf_ohlc"] = etf_ohlc
 
+    rotation_json = build_rotation_json(
+        clock_daily=clock_daily,
+        overlay_frames=overlay_frames,
+        status=status,
+        force_download=force_download,
+        price_end=price_end,
+        strategy_end=strategy_end,
+    )
+    flow_json = refresh_theme_flow(allow_network=force_download)
+
     catalog = {
         "schema_version": 1,
         "data_product": "amv_research_catalog",
@@ -644,13 +834,13 @@ def build_site(
         "language": ["zh-CN"],
         "disclaimer": DISCLAIMER,
         "disclaimer_long": DISCLAIMER_LONG,
-        "site_name": "创业板 0AMV 研究时钟",
+        "site_name": "创业板研究观察",
         "github_repo": github_repo(),
         "pages_url": pages_url(),
-        "expected_update": "每个交易日北京时间 20:00 左右",
+        "expected_update": "每个交易日晚上八点左右",
         "amv_phone_workflow": (
-            "点页面右上角「录入 0AMV」，填收盘价后用仓库所有者 GitHub 账号提交 Issue；"
-            "Actions 会写入并更新网页。"
+            "在创业板这一页点右上角「录入 0AMV」，填收盘价后用仓库所有者的 GitHub 账号提交；"
+            "大约一两分钟后刷新网页就能看到。"
         ),
         "banners": banners,
         "freshness": {
@@ -664,21 +854,34 @@ def build_site(
             "amv_stale": amv_stale,
             "emotion_stale": emotion_stale,
         },
+        "pages": [
+            {"id": "cyb", "tab": "创业板指数策略"},
+            {
+                "id": "rotation",
+                "tab": "板块轮动策略",
+                "agent_url": "data/agent/sector-rotation.json",
+            },
+            {
+                "id": "flow",
+                "tab": "板块资金流入",
+                "agent_url": "data/agent/theme-fund-flow.json",
+            },
+        ],
         "indices": [
             {
                 "key": "cyb-clock",
-                "tab": "创业板 0AMV 满仓",
-                "index_name_cn": "创业板 0AMV 满仓",
-                "rule": "amv_emo70_ma60",
-                "role": "live_clock",
+                "tab": "满仓",
+                "index_name_cn": "创业板满仓",
+                "rule": "满仓进出",
+                "role": "live",
                 "agent_url": "data/agent/cyb-clock.json",
                 "full_series_url": "data/cyb-clock.json",
             },
             {
                 "key": "cyb-committee",
-                "tab": "五份离场委员会",
-                "index_name_cn": "五份离场委员会",
-                "rule": "sleeves_emo_50_70",
+                "tab": "五份仓",
+                "index_name_cn": "五份仓观察",
+                "rule": "五份仓",
                 "role": "observation",
                 "agent_url": "data/agent/cyb-committee.json",
                 "full_series_url": "data/cyb-committee.json",
@@ -693,7 +896,7 @@ def build_site(
         "indices": [
             {
                 "key": "cyb-clock",
-                "name": "创业板 0AMV 满仓",
+                "name": "创业板满仓",
                 "latest_point": clock_json["performance"]["latest_point"],
                 "annualized_return": clock_json["performance"]["annualized_return"],
                 "max_drawdown": clock_json["performance"]["max_drawdown"]["value"],
@@ -703,13 +906,23 @@ def build_site(
             },
             {
                 "key": "cyb-committee",
-                "name": "五份离场委员会",
+                "name": "五份仓观察",
                 "latest_point": committee_json["performance"]["latest_point"],
                 "annualized_return": committee_json["performance"]["annualized_return"],
                 "max_drawdown": committee_json["performance"]["max_drawdown"]["value"],
                 "sharpe": committee_json["performance"]["sharpe"],
                 "exposure": committee_json["performance"]["exposure"],
                 "position": committee_json["position"]["label"],
+            },
+            {
+                "key": "sector-rotation",
+                "name": "板块轮动对照",
+                "latest_point": rotation_json["performance"]["latest_point"],
+                "annualized_return": rotation_json["performance"]["annualized_return"],
+                "max_drawdown": rotation_json["performance"]["max_drawdown"]["value"],
+                "sharpe": rotation_json["performance"]["sharpe"],
+                "exposure": rotation_json["performance"]["exposure"],
+                "position": rotation_json["position"]["label"],
             },
         ],
     }
@@ -721,16 +934,22 @@ def build_site(
     _json_dump(agent_dir / "compare.json", compare)
     _json_dump(agent_dir / "cyb-clock.json", clock_json)
     _json_dump(agent_dir / "cyb-committee.json", committee_json)
+    _json_dump(agent_dir / "sector-rotation.json", rotation_json)
+    _json_dump(agent_dir / "theme-fund-flow.json", flow_json)
     _json_dump(data_dir / "cyb-clock.json", clock_json)
     _json_dump(data_dir / "cyb-committee.json", committee_json)
+    _json_dump(data_dir / "sector-rotation.json", rotation_json)
     copy_static_site(Path(out_dir))
     (Path(out_dir) / ".nojekyll").write_text("", encoding="utf-8")
     return {
         "strategy_end": strategy_end.isoformat(),
         "clock_nav": clock_json["performance"]["latest_point"],
         "committee_nav": committee_json["performance"]["latest_point"],
+        "rotation_nav": rotation_json["performance"]["latest_point"],
         "clock_position": clock_json["position"]["label"],
         "committee_position": committee_json["position"]["label"],
+        "rotation_position": rotation_json["position"]["label"],
+        "flow_as_of": flow_json.get("as_of"),
         "banners": banners,
         "out_dir": str(out_dir),
     }

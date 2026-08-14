@@ -87,3 +87,64 @@ def test_seed_cloud_prefers_compass_on_same_date(tmp_path: Path) -> None:
     close_14 = float(out.loc[out["date"] == pd.Timestamp("2026-08-14"), "close"].iloc[0])
     assert abs(close_13 - 208572.3) < 0.1
     assert abs(close_14 - 207502.5) < 0.1
+
+
+def test_filter_theme_flow_keeps_tech_boards() -> None:
+    from ai_invest_advisor.site_fund_flow import filter_theme_flow
+
+    frame = pd.DataFrame(
+        {
+            "board_name": ["PCB概念", "白酒", "光模块", "银行"],
+            "net_amount": [1.2, 9.0, 0.5, -1.0],
+            "pct_change": [2.0, 1.0, 3.0, 0.1],
+        }
+    )
+    out = filter_theme_flow(frame)
+    assert list(out["board_name"]) == ["PCB概念", "光模块"]
+    assert "PCB" in str(out.iloc[0]["theme"])
+    assert "CPO" in str(out.iloc[1]["theme"])
+
+
+def test_refresh_theme_flow_uses_snapshot_when_offline(tmp_path: Path, monkeypatch) -> None:
+    from ai_invest_advisor import site_fund_flow
+
+    snapshot = tmp_path / "theme_fund_flow.csv"
+    pd.DataFrame(
+        {
+            "board_name": ["光模块"],
+            "theme": ["CPO"],
+            "board_type": ["concept"],
+            "pct_change": [1.2],
+            "net_amount": [3.4],
+            "inflow": [5.0],
+            "outflow": [1.6],
+            "leader": ["中际旭创"],
+            "leader_pct_change": [2.1],
+            "as_of": ["2026-08-13"],
+        }
+    ).to_csv(snapshot, index=False, encoding="utf-8-sig")
+    monkeypatch.setattr(site_fund_flow, "FLOW_PATH", snapshot)
+    payload = site_fund_flow.refresh_theme_flow(allow_network=False)
+    assert payload["as_of"] == "2026-08-13"
+    assert payload["rows"][0]["board_name"] == "光模块"
+    assert any("停在 2026-08-13" in msg for msg in payload["banners"])
+
+
+def test_rotation_holdings_parses_codes() -> None:
+    from ai_invest_advisor.strategy_site import rotation_holdings
+
+    daily = pd.DataFrame(
+        {
+            "date": pd.to_datetime(["2026-01-05", "2026-02-03"]),
+            "held": ["", "512480,515880"],
+            "n_held": [0, 2],
+            "traded": [0, 1],
+            "equity": [1.0, 1.01],
+        }
+    )
+    out = rotation_holdings(daily)
+    assert out["empty"] is False
+    assert out["last_rebalance"] == "2026-02-03"
+    assert [row["code"] for row in out["rows"]] == ["512480", "515880"]
+    assert out["rows"][0]["name"] == "半导体ETF"
+    assert out["rows"][1]["note"]

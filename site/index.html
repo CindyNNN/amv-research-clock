@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>创业板 0AMV 研究时钟</title>
-  <meta name="description" content="研究辅助，不是投资建议。创业板 0AMV 满仓时钟与五份离场委员会观察净值。" />
+  <title>创业板研究观察</title>
+  <meta name="description" content="研究辅助，不是投资建议。创业板择时、板块轮动对照、科技主题资金流入。" />
   <link rel="stylesheet" href="styles.css" />
   <script src="https://unpkg.com/lightweight-charts@4.2.3/dist/lightweight-charts.standalone.production.js"></script>
 </head>
@@ -12,8 +12,8 @@
   <header class="top">
     <div class="brand">
       <div class="brand-kicker">公开研究净值</div>
-      <h1>创业板 0AMV 研究时钟</h1>
-      <p class="tagline">用可复盘规则跟踪创业板择时观察序列 · 每个交易日北京时间约 20:00 更新</p>
+      <h1>创业板研究观察</h1>
+      <p class="tagline">三个页面：创业板择时、板块轮动对照、科技主题资金。每个交易日晚上八点左右更新。</p>
     </div>
     <div class="header-meta">
       <button type="button" class="amv-btn" id="amv-open">录入 0AMV</button>
@@ -22,9 +22,10 @@
     </div>
   </header>
 
-  <div class="disclaimer-bar">研究辅助，不是投资建议。不代客下单，不索取券商账号。</div>
+  <div class="disclaimer-bar">研究辅助，不是投资建议。不会帮你下单，也不会要券商账号。</div>
   <div id="banners" class="banners" hidden></div>
 
+  <nav class="pages" id="pages" role="tablist"></nav>
   <nav class="tabs" id="tabs" role="tablist"></nav>
 
   <main>
@@ -34,7 +35,7 @@
         <div class="hero-sub" id="hero-sub"></div>
       </div>
       <div class="hero-point">
-        <div class="label">最新净值</div>
+        <div class="label" id="hero-point-label">最新净值</div>
         <div class="point" id="latest-point">—</div>
         <div class="muted" id="point-asof"></div>
       </div>
@@ -42,39 +43,84 @@
 
     <section class="cards" id="metric-cards"></section>
 
-    <section class="chart-panel">
-      <div class="chart-toolbar">
-        <div class="chips" id="period-chips"></div>
-        <div class="mode-toggle">
-          <button type="button" data-mode="nav" class="active">净值</button>
-          <button type="button" data-mode="kline">创业板ETF K线</button>
+    <div id="strategy-view">
+      <section class="chart-panel">
+        <div class="chart-toolbar">
+          <div class="chips" id="period-chips"></div>
+          <div class="mode-toggle" id="mode-toggle">
+            <button type="button" data-mode="nav" class="active">净值</button>
+            <button type="button" data-mode="kline">创业板 ETF K 线</button>
+          </div>
         </div>
-      </div>
-      <div class="overlays" id="overlay-box"></div>
-      <div id="chart" class="chart"></div>
-      <div class="legend" id="legend"></div>
-    </section>
+        <div class="overlays" id="overlay-box"></div>
+        <div id="chart" class="chart"></div>
+        <div class="legend" id="legend"></div>
+      </section>
 
-    <section class="table-panel">
-      <h2>分年度超额收益</h2>
-      <p class="muted">
-        超额 = (1+本序列当年涨跌)/(1+基准当年涨跌)−1（比值法）。不完整年以 * 标注。
-        当前基准：<select id="bench-select"></select>
-      </p>
-      <div class="table-wrap">
-        <table>
-          <thead>
-            <tr>
-              <th>年份</th>
-              <th>本序列</th>
-              <th>基准</th>
-              <th>超额</th>
-            </tr>
-          </thead>
-          <tbody id="year-body"></tbody>
-        </table>
-      </div>
-    </section>
+      <section class="table-panel" id="holdings-panel" hidden>
+        <h2>现在拿着什么</h2>
+        <p class="muted" id="holdings-note"></p>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>ETF</th>
+                <th>主题</th>
+                <th>权重</th>
+                <th>说明</th>
+              </tr>
+            </thead>
+            <tbody id="holdings-body"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="table-panel" id="year-panel">
+        <h2>分年对比</h2>
+        <p class="muted">
+          看这一页相对基准多赚还是少赚。不完整的年份会打星号。
+          当前基准：<select id="bench-select"></select>
+        </p>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>年份</th>
+                <th>本页</th>
+                <th>基准</th>
+                <th>多赚/少赚</th>
+              </tr>
+            </thead>
+            <tbody id="year-body"></tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+
+    <div id="flow-view" hidden>
+      <section class="chart-panel">
+        <h2>净流入排行</h2>
+        <p class="muted" id="flow-chart-note">红的是净流入，绿的是净流出。单位：亿元。</p>
+        <div class="flow-bars" id="flow-bars"></div>
+      </section>
+      <section class="table-panel">
+        <h2>主题资金明细</h2>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>板块</th>
+                <th>主题</th>
+                <th>涨跌</th>
+                <th>净流入</th>
+                <th>领涨股</th>
+              </tr>
+            </thead>
+            <tbody id="flow-body"></tbody>
+          </table>
+        </div>
+      </section>
+    </div>
 
     <section class="text-panel">
       <h2>编制说明</h2>
@@ -88,15 +134,15 @@
   </main>
 
   <footer>
-    <p>指南针 0AMV：点右上角 <strong>录入 0AMV</strong>，填收盘价后用仓库所有者 GitHub 账号提交。约 1–2 分钟后刷新本页。</p>
-    <p>指南针/通达信无法在 GitHub 运行；未提交新收盘时，站点仍刷新指数对比层，信号沿用上一有效日。</p>
+    <p id="footer-amv">指南针 0AMV：在创业板这一页点右上角 <strong>录入 0AMV</strong>，填收盘价后用仓库所有者的 GitHub 账号提交。大约一两分钟后刷新本页。</p>
+    <p>指南针算不出的数，网站也不会自动算。没提交新收盘时，对比线仍会更新，买卖信号仍按上一有效日。</p>
     <p>研究辅助，不是投资建议。</p>
   </footer>
 
   <dialog id="amv-dialog" class="amv-dialog">
     <form id="amv-form" method="dialog">
       <h2>录入指南针 0AMV</h2>
-      <p class="muted">提交后会打开 GitHub，还需要再点一次绿色 <strong>Create issue</strong> 才会写入。若填的收盘价和上一有效日相同，仓位不会变。</p>
+      <p class="muted">提交后会打开 GitHub，还要再点一次绿色「提交新 issue」才会写入。如果填的收盘价和上一有效日相同，仓位不会变。</p>
       <label>
         日期
         <input id="amv-date" name="date" type="date" required />

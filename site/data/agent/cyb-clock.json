@@ -2,18 +2,19 @@
   "schema_version": 1,
   "data_product": "amv_research_index",
   "disclaimer": "研究辅助，不是投资建议。",
-  "disclaimer_long": "本站所有净值、仓位、超额与图表仅供研究观察，不构成投资建议、收益承诺或交易指令。不代客下单，不索取券商账号。",
-  "generated_at_utc": "2026-08-14T14:23:49Z",
+  "disclaimer_long": "这里的净值、仓位、图表只供自己复盘看，不是投资建议，也不保证以后还能这样。不会帮你下单，也不会要券商账号。",
+  "generated_at_utc": "2026-08-14T14:47:56Z",
   "index": {
     "key": "cyb-clock",
-    "index_name_cn": "创业板 0AMV 满仓",
-    "index_name_en": "ChiNext 0AMV Full-Lot Clock",
-    "rule": "amv_emo70_ma60",
+    "index_name_cn": "创业板满仓",
+    "index_name_en": "ChiNext full-lot",
+    "rule": "满仓进出",
     "data_start_date": "2020-01-02",
     "data_end_date": "2026-08-14",
     "base_date": "2020-01-02",
     "base_point": 1000.0,
-    "observation_only": false
+    "observation_only": false,
+    "headline": "日常跟仓看这一页"
   },
   "freshness": {
     "amv_as_of": "2026-08-14",
@@ -24,15 +25,13 @@
     "overlay_as_of": "2026-08-14",
     "amv_stale": false,
     "emotion_stale": false,
-    "expected_update": "每个交易日北京时间 20:00 左右（GitHub Actions 12:00 UTC）"
+    "expected_update": "每个交易日晚上八点左右更新"
   },
-  "banners": [
-    "同花顺情绪刷新失败，沿用仓库内 combined CSV：无法加载指南针0AMV日线（/home/runner/work/amv-research-clock/amv-research-clock/data/compass/0amv_daily.csv）：找不到 0AMV 日线: /home/runner/work/amv-research-clock/amv-research-clock/data/compass/0amv_daily.csv"
-  ],
+  "banners": [],
   "performance": {
     "latest_point": 3528.2949682013486,
-    "annualized_return": 0.20998687630554805,
-    "sharpe": 0.8869588564302446,
+    "annualized_return": 0.20998687630554808,
+    "sharpe": 0.8869588564302416,
     "exposure": 0.6182158452900811,
     "max_drawdown": {
       "value": -0.2723549473044756,
@@ -74192,19 +74191,18 @@
     }
   ],
   "methodology": {
-    "underlying": "创业板 ETF 159915",
-    "rule": "amv_emo70_ma60",
-    "entry": "0AMV 两日涨跌幅之和 > 3%，收盘确认、次日开盘满仓买入",
-    "exit": "市场情绪 ≥ 70 离场；若标的收盘价在 MA60 上方则忽略该次离场",
-    "position": "二元满仓/空仓，不慢加仓",
-    "cost": "单边 10bp",
-    "window": "2020-01-02 至 2026-08-14",
-    "interpretation": "本站所有净值、仓位、超额与图表仅供研究观察，不构成投资建议、收益承诺或交易指令。不代客下单，不索取券商账号。"
+    "标的": "创业板 ETF（159915）",
+    "怎么进出": "0AMV 两日涨幅加起来超过 3% 就进；市场情绪到 70 就出。如果价格还在 60 日均线上方，这次离场先不算。",
+    "仓位": "要么满仓，要么空仓，不慢慢加。",
+    "成交": "当天收盘确认，第二天开盘成交。",
+    "费用": "单边千分之一。",
+    "窗口": "2020-01-02 到 2026-08-14",
+    "说明": "这里的净值、仓位、图表只供自己复盘看，不是投资建议，也不保证以后还能这样。不会帮你下单，也不会要券商账号。"
   },
   "risk_notes": [
-    "历史回测含手续费假设（单边 10bp），不代表未来可实现收益。",
-    "0AMV 无法在 GitHub 自动计算，需手机 Actions 手工粘贴收盘价。",
-    "收盘确认、次日开盘成交；样本末日持仓按收盘盯市。",
+    "回测里按单边千分之一算了费用，过去的结果不代表以后也能赚到。",
+    "0AMV 要自己从指南针抄收盘价过来，网站不会自动算。",
+    "信号按当天收盘确认，第二天开盘才成交；最后一天的仓位按收盘估算。",
     "研究辅助，不是投资建议。"
   ],
   "etf_ohlc": [

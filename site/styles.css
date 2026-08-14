@@ -17,6 +17,7 @@
 * { box-sizing: border-box; }
 html, body { margin: 0; background: var(--bg); color: var(--text); }
 body { min-height: 100vh; }
+[hidden] { display: none !important; }
 
 .top {
   display: flex;
@@ -74,9 +75,32 @@ h1 { margin: 6px 0 8px; font-size: 28px; font-weight: 650; }
   font-size: 13px;
 }
 
-.tabs {
+.pages {
   max-width: 1180px;
   margin: 18px auto 0;
+  padding: 0 28px;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+.pages button {
+  background: var(--bg-elev);
+  color: var(--text);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 12px 14px;
+  font-size: 15px;
+  font-weight: 650;
+  cursor: pointer;
+}
+.pages button.active {
+  color: var(--bg);
+  background: var(--gold);
+  border-color: var(--gold);
+}
+.tabs {
+  max-width: 1180px;
+  margin: 10px auto 0;
   padding: 0 28px;
   display: flex;
   gap: 8px;
@@ -198,8 +222,29 @@ footer {
 }
 code { color: var(--gold); }
 
+.flow-bars { display: flex; flex-direction: column; gap: 10px; margin-top: 12px; }
+.flow-bar-row {
+  display: grid;
+  grid-template-columns: minmax(88px, 160px) 1fr 88px;
+  gap: 10px;
+  align-items: center;
+  font-size: 13px;
+}
+.flow-bar-name { color: var(--text); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.flow-bar-track {
+  height: 10px;
+  background: #1f1f27;
+  border-radius: 999px;
+  overflow: hidden;
+}
+.flow-bar-fill { height: 100%; border-radius: 999px; }
+.flow-bar-fill.up { background: var(--up); }
+.flow-bar-fill.down { background: var(--down); }
+.flow-bar-val { text-align: right; font-variant-numeric: tabular-nums; }
+
 @media (max-width: 720px) {
-  .top, main, .tabs, .disclaimer-bar, footer { padding-left: 16px; padding-right: 16px; }
+  .top, main, .tabs, .pages, .disclaimer-bar, footer { padding-left: 16px; padding-right: 16px; }
+  .pages { grid-template-columns: 1fr; }
   .top { flex-direction: column; }
   .header-meta, .hero-point, .hero { text-align: left; }
   .hero { flex-direction: column; align-items: flex-start; }

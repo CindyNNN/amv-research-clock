@@ -17,7 +17,7 @@
 
 ## 板块
 
-- [[Sectors/2026-08-14_AMV-Public-Research-Site|0AMV 公开研究站]]
+- [[Sectors/2026-08-14_AMV-Public-Research-Site|创业板公开研究站（三页）]]
 - [[Sectors/2026-08-14_AMV-Five-Tranche|0AMV 五份仓位]]
 - [[Sectors/2026-08-14_AMV-Sector-Rotation-WF|月频行业ETF轮动 Walk-forward]]
 - [[Sectors/2026-08-14_AMV-Sector-ETF-Rotation|0AMV 行业ETF轮动]]

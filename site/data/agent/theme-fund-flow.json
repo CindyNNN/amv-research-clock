@@ -1,0 +1,366 @@
+{
+  "schema_version": 1,
+  "page": "flow",
+  "disclaimer": "研究辅助，不是投资建议。",
+  "disclaimer_long": "这是当天资金快照，只看科技相关主题，不是买卖建议。",
+  "as_of": "2026-08-14",
+  "unit": "亿元",
+  "total_net": 899.4600000000003,
+  "count": 31,
+  "rows": [
+    {
+      "board_name": "液冷服务器",
+      "theme": "液冷",
+      "board_type": "concept",
+      "pct_change": 1.65,
+      "net_amount": 133.73,
+      "inflow": 1073.71,
+      "outflow": 939.98,
+      "leader": "网宿科技",
+      "leader_pct_change": 20.01
+    },
+    {
+      "board_name": "共封装光学(CPO)",
+      "theme": "CPO",
+      "board_type": "concept",
+      "pct_change": 2.94,
+      "net_amount": 132.76,
+      "inflow": 1582.63,
+      "outflow": 1449.87,
+      "leader": "金戈新材",
+      "leader_pct_change": 29.98
+    },
+    {
+      "board_name": "数据中心(AIDC)",
+      "theme": "液冷",
+      "board_type": "concept",
+      "pct_change": 0.79,
+      "net_amount": 94.6,
+      "inflow": 2200.78,
+      "outflow": 2106.18,
+      "leader": "网宿科技",
+      "leader_pct_change": 20.01
+    },
+    {
+      "board_name": "芯片概念",
+      "theme": "芯片",
+      "board_type": "concept",
+      "pct_change": 1.52,
+      "net_amount": 88.63,
+      "inflow": 3203.28,
+      "outflow": 3114.65,
+      "leader": "敏芯股份",
+      "leader_pct_change": 20.01
+    },
+    {
+      "board_name": "存储芯片",
+      "theme": "芯片",
+      "board_type": "concept",
+      "pct_change": 2.27,
+      "net_amount": 50.82,
+      "inflow": 1307.66,
+      "outflow": 1256.85,
+      "leader": "阿莱德",
+      "leader_pct_change": 20.0
+    },
+    {
+      "board_name": "PCB概念",
+      "theme": "PCB",
+      "board_type": "concept",
+      "pct_change": 2.08,
+      "net_amount": 50.04,
+      "inflow": 824.02,
+      "outflow": 773.98,
+      "leader": "瑞丰高材",
+      "leader_pct_change": 16.09
+    },
+    {
+      "board_name": "算力租赁",
+      "theme": "液冷",
+      "board_type": "concept",
+      "pct_change": 0.69,
+      "net_amount": 48.51,
+      "inflow": 597.3,
+      "outflow": 548.79,
+      "leader": "网宿科技",
+      "leader_pct_change": 20.01
+    },
+    {
+      "board_name": "人形机器人",
+      "theme": "机器人",
+      "board_type": "concept",
+      "pct_change": 0.6,
+      "net_amount": 37.23,
+      "inflow": 926.88,
+      "outflow": 889.65,
+      "leader": "敏芯股份",
+      "leader_pct_change": 20.01
+    },
+    {
+      "board_name": "铜缆高速连接",
+      "theme": "CPO",
+      "board_type": "concept",
+      "pct_change": 2.33,
+      "net_amount": 36.67,
+      "inflow": 224.77,
+      "outflow": 188.1,
+      "leader": "中富电路",
+      "leader_pct_change": 11.74
+    },
+    {
+      "board_name": "稀土永磁",
+      "theme": "稀土",
+      "board_type": "concept",
+      "pct_change": 2.07,
+      "net_amount": 35.61,
+      "inflow": 159.24,
+      "outflow": 123.63,
+      "leader": "金田股份",
+      "leader_pct_change": 10.05
+    },
+    {
+      "board_name": "东数西算(算力)",
+      "theme": "液冷",
+      "board_type": "concept",
+      "pct_change": 0.78,
+      "net_amount": 33.32,
+      "inflow": 1292.14,
+      "outflow": 1258.82,
+      "leader": "网宿科技",
+      "leader_pct_change": 20.01
+    },
+    {
+      "board_name": "小金属概念",
+      "theme": "小金属",
+      "board_type": "concept",
+      "pct_change": 0.63,
+      "net_amount": 28.57,
+      "inflow": 474.9,
+      "outflow": 446.34,
+      "leader": "成都路桥",
+      "leader_pct_change": 10.1
+    },
+    {
+      "board_name": "小金属",
+      "theme": "小金属",
+      "board_type": "industry",
+      "pct_change": 1.99,
+      "net_amount": 28.38,
+      "inflow": 170.48,
+      "outflow": 142.1,
+      "leader": "中国稀土",
+      "leader_pct_change": 10.0
+    },
+    {
+      "board_name": "商业航天",
+      "theme": "商业航天",
+      "board_type": "concept",
+      "pct_change": 0.8,
+      "net_amount": 23.6,
+      "inflow": 963.31,
+      "outflow": 939.71,
+      "leader": "蓝盾光电",
+      "leader_pct_change": 20.0
+    },
+    {
+      "board_name": "MCU芯片",
+      "theme": "芯片",
+      "board_type": "concept",
+      "pct_change": 1.4,
+      "net_amount": 22.8,
+      "inflow": 314.24,
+      "outflow": 291.43,
+      "leader": "盈新发展",
+      "leader_pct_change": 10.18
+    },
+    {
+      "board_name": "光刻机",
+      "theme": "半导体设备",
+      "board_type": "concept",
+      "pct_change": 2.42,
+      "net_amount": 21.4,
+      "inflow": 173.18,
+      "outflow": 151.78,
+      "leader": "中瓷电子",
+      "leader_pct_change": 10.0
+    },
+    {
+      "board_name": "电子化学品",
+      "theme": "半导体材料",
+      "board_type": "industry",
+      "pct_change": 4.07,
+      "net_amount": 16.19,
+      "inflow": 171.56,
+      "outflow": 155.37,
+      "leader": "中石科技",
+      "leader_pct_change": 20.01
+    },
+    {
+      "board_name": "光刻胶",
+      "theme": "半导体材料",
+      "board_type": "concept",
+      "pct_change": 2.08,
+      "net_amount": 13.46,
+      "inflow": 137.22,
+      "outflow": 123.76,
+      "leader": "阿拉丁",
+      "leader_pct_change": 10.88
+    },
+    {
+      "board_name": "钙钛矿电池",
+      "theme": "小金属",
+      "board_type": "concept",
+      "pct_change": 1.0,
+      "net_amount": 13.35,
+      "inflow": 198.29,
+      "outflow": 184.94,
+      "leader": "逸飞激光",
+      "leader_pct_change": 9.35
+    },
+    {
+      "board_name": "无人机",
+      "theme": "商业航天",
+      "board_type": "concept",
+      "pct_change": 0.77,
+      "net_amount": 10.38,
+      "inflow": 588.79,
+      "outflow": 578.41,
+      "leader": "中石科技",
+      "leader_pct_change": 20.01
+    },
+    {
+      "board_name": "低空经济",
+      "theme": "商业航天",
+      "board_type": "concept",
+      "pct_change": 0.52,
+      "net_amount": 7.47,
+      "inflow": 626.99,
+      "outflow": 619.52,
+      "leader": "金博股份",
+      "leader_pct_change": 13.56
+    },
+    {
+      "board_name": "卫星导航",
+      "theme": "商业航天",
+      "board_type": "concept",
+      "pct_change": 0.74,
+      "net_amount": 4.27,
+      "inflow": 491.4,
+      "outflow": 487.13,
+      "leader": "中瓷电子",
+      "leader_pct_change": 10.0
+    },
+    {
+      "board_name": "减速器",
+      "theme": "机器人",
+      "board_type": "concept",
+      "pct_change": 0.01,
+      "net_amount": 2.77,
+      "inflow": 126.24,
+      "outflow": 123.46,
+      "leader": "斯莱克",
+      "leader_pct_change": 6.9
+    },
+    {
+      "board_name": "半导体",
+      "theme": "半导体",
+      "board_type": "industry",
+      "pct_change": 1.86,
+      "net_amount": 0.59,
+      "inflow": 1126.7,
+      "outflow": 1126.11,
+      "leader": "敏芯股份",
+      "leader_pct_change": 20.01
+    },
+    {
+      "board_name": "汽车芯片",
+      "theme": "芯片",
+      "board_type": "concept",
+      "pct_change": 1.43,
+      "net_amount": -1.5,
+      "inflow": 553.87,
+      "outflow": 555.37,
+      "leader": "联芸科技",
+      "leader_pct_change": 11.26
+    },
+    {
+      "board_name": "机器视觉",
+      "theme": "机器人",
+      "board_type": "concept",
+      "pct_change": 0.84,
+      "net_amount": -1.74,
+      "inflow": 353.55,
+      "outflow": 355.29,
+      "leader": "越剑智能",
+      "leader_pct_change": 10.02
+    },
+    {
+      "board_name": "工业母机",
+      "theme": "机器人",
+      "board_type": "concept",
+      "pct_change": 0.67,
+      "net_amount": -2.47,
+      "inflow": 148.27,
+      "outflow": 150.74,
+      "leader": "万讯自控",
+      "leader_pct_change": 6.61
+    },
+    {
+      "board_name": "钛白粉概念",
+      "theme": "小金属",
+      "board_type": "concept",
+      "pct_change": -0.47,
+      "net_amount": -2.49,
+      "inflow": 8.0,
+      "outflow": 10.49,
+      "leader": "道恩股份",
+      "leader_pct_change": 0.82
+    },
+    {
+      "board_name": "先进封装",
+      "theme": "半导体",
+      "board_type": "concept",
+      "pct_change": 2.12,
+      "net_amount": -2.56,
+      "inflow": 923.68,
+      "outflow": 926.24,
+      "leader": "中富电路",
+      "leader_pct_change": 11.74
+    },
+    {
+      "board_name": "机器人概念",
+      "theme": "机器人",
+      "board_type": "concept",
+      "pct_change": 0.48,
+      "net_amount": -11.16,
+      "inflow": 1746.28,
+      "outflow": 1757.45,
+      "leader": "敏芯股份",
+      "leader_pct_change": 20.01
+    },
+    {
+      "board_name": "第三代半导体",
+      "theme": "半导体",
+      "board_type": "concept",
+      "pct_change": 1.52,
+      "net_amount": -13.77,
+      "inflow": 567.32,
+      "outflow": 581.09,
+      "leader": "金博股份",
+      "leader_pct_change": 13.56
+    }
+  ],
+  "banners": [
+    "这次没上网拉资金流，数据停在 2026-08-14。"
+  ],
+  "methodology": {
+    "范围": "只保留名字对得上 PCB、CPO、机器人、液冷、商业航天、稀土、小金属、半导体相关的概念或行业板块。",
+    "口径": "东财即时资金流（概念+行业），净额单位按源数据，一般为亿元。",
+    "注意": "和「板块轮动」页用的行业 ETF 不是同一套名单，不能直接对照持仓。"
+  },
+  "risk_notes": [
+    "资金流是盘中或收盘快照，隔天会变，也不代表后面一定涨。",
+    "板块名字靠关键词归类，个别板块可能归得不准。",
+    "研究辅助，不是投资建议。"
+  ]
+}
