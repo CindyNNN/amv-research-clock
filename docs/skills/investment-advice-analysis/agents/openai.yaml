@@ -1,0 +1,4 @@
+interface:
+  display_name: "Investment Advice Analysis"
+  short_description: "Evidence-backed trade advice workflow"
+  default_prompt: "Use this project skill to analyze whether a sector or stock is worth buying, holding, reducing, or avoiding now. Follow the local dashboard-first workflow, verify current prices when needed, and produce cautious trade advice with position sizing and risk triggers."

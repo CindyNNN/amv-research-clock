@@ -1,0 +1,36 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ai-invest-advisor"
+version = "0.1.0"
+description = "Local A/H share AI investment research assistant"
+requires-python = ">=3.10"
+dependencies = [
+  "pandas>=2.0",
+  "tomli>=2.0; python_version < '3.11'",
+]
+
+[project.optional-dependencies]
+data = [
+  "akshare>=1.16",
+  "openpyxl>=3.1",
+]
+test = [
+  "pytest>=8.0",
+]
+dashboard = [
+  "streamlit>=1.30",
+  "plotly>=5.18",
+]
+
+[project.scripts]
+ai-invest-advisor = "ai_invest_advisor.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]

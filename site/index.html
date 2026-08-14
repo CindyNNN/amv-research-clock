@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>创业板 0AMV 研究时钟</title>
+  <meta name="description" content="研究辅助，不是投资建议。创业板 0AMV 满仓时钟与五份离场委员会观察净值。" />
+  <link rel="stylesheet" href="styles.css" />
+  <script src="https://unpkg.com/lightweight-charts@4.2.3/dist/lightweight-charts.standalone.production.js"></script>
+</head>
+<body>
+  <header class="top">
+    <div class="brand">
+      <div class="brand-kicker">公开研究净值</div>
+      <h1>创业板 0AMV 研究时钟</h1>
+      <p class="tagline">用可复盘规则跟踪创业板择时观察序列 · 每个交易日北京时间约 20:00 更新</p>
+    </div>
+    <div class="header-meta">
+      <div class="clock" id="bj-clock">北京时间 --:--:--</div>
+      <div class="asof" id="asof-chip">数据日 --</div>
+    </div>
+  </header>
+
+  <div class="disclaimer-bar">研究辅助，不是投资建议。不代客下单，不索取券商账号。</div>
+  <div id="banners" class="banners" hidden></div>
+
+  <nav class="tabs" id="tabs" role="tablist"></nav>
+
+  <main>
+    <section class="hero">
+      <div>
+        <div class="hero-name" id="hero-name">—</div>
+        <div class="hero-sub" id="hero-sub"></div>
+      </div>
+      <div class="hero-point">
+        <div class="label">最新净值</div>
+        <div class="point" id="latest-point">—</div>
+        <div class="muted" id="point-asof"></div>
+      </div>
+    </section>
+
+    <section class="cards" id="metric-cards"></section>
+
+    <section class="chart-panel">
+      <div class="chart-toolbar">
+        <div class="chips" id="period-chips"></div>
+        <div class="mode-toggle">
+          <button type="button" data-mode="nav" class="active">净值</button>
+          <button type="button" data-mode="kline">创业板ETF K线</button>
+        </div>
+      </div>
+      <div class="overlays" id="overlay-box"></div>
+      <div id="chart" class="chart"></div>
+      <div class="legend" id="legend"></div>
+    </section>
+
+    <section class="table-panel">
+      <h2>分年度超额收益</h2>
+      <p class="muted">
+        超额 = (1+本序列当年涨跌)/(1+基准当年涨跌)−1（比值法）。不完整年以 * 标注。
+        当前基准：<select id="bench-select"></select>
+      </p>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>年份</th>
+              <th>本序列</th>
+              <th>基准</th>
+              <th>超额</th>
+            </tr>
+          </thead>
+          <tbody id="year-body"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="text-panel">
+      <h2>编制说明</h2>
+      <ul id="method-list"></ul>
+    </section>
+
+    <section class="text-panel risk">
+      <h2>风险提示</h2>
+      <ul id="risk-list"></ul>
+    </section>
+  </main>
+
+  <footer>
+    <p>手机补录 0AMV：GitHub App → Actions → <strong>Build strategy site</strong> → Run workflow → 填写 <code>amv_close</code>。</p>
+    <p>指南针/通达信无法在 GitHub 运行；未粘贴新收盘时，站点仍刷新指数对比层，信号沿用上一有效日。</p>
+    <p>研究辅助，不是投资建议。</p>
+  </footer>
+  <script src="app.js"></script>
+</body>
+</html>

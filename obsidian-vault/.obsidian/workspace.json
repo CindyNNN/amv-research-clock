@@ -1,0 +1,193 @@
+{
+  "main": {
+    "id": "c3883f848e0e600f",
+    "type": "split",
+    "children": [
+      {
+        "id": "4623a2215ea03534",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "c99caead4b3c5131",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Investment-Research/Sectors/2026-07-03_AI-Hardware-Application-Performance-Screen.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "2026-07-03_AI-Hardware-Application-Performance-Screen"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "bf466c3c053d03d0",
+    "type": "split",
+    "children": [
+      {
+        "id": "89f9f1e3b6468856",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "7b3f05dac81dc7ea",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical",
+                "autoReveal": false
+              },
+              "icon": "lucide-folder-closed",
+              "title": "文件列表"
+            }
+          },
+          {
+            "id": "0cf344a0f2151b84",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              },
+              "icon": "lucide-search",
+              "title": "搜索"
+            }
+          },
+          {
+            "id": "2283bd30e7f58741",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {},
+              "icon": "lucide-bookmark",
+              "title": "书签"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300
+  },
+  "right": {
+    "id": "6d94efdd9cb5fed5",
+    "type": "split",
+    "children": [
+      {
+        "id": "a0149c91ef6ecdf3",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "2e08a16da3703df4",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "Investment-Research/Sectors/2026-06-17_Liquid-Cooling.md",
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-coming-in",
+              "title": "2026-06-17_Liquid-Cooling 的反向链接列表"
+            }
+          },
+          {
+            "id": "a3305f7bc0c640ec",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "file": "Investment-Research/Sectors/2026-06-17_Liquid-Cooling.md",
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-going-out",
+              "title": "2026-06-17_Liquid-Cooling 的出链列表"
+            }
+          },
+          {
+            "id": "7268fdc5c8cd8261",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-tags",
+              "title": "标签"
+            }
+          },
+          {
+            "id": "5b1c6bcecdd1a2f7",
+            "type": "leaf",
+            "state": {
+              "type": "all-properties",
+              "state": {
+                "sortOrder": "frequency",
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-archive",
+              "title": "添加笔记属性"
+            }
+          },
+          {
+            "id": "7028a29b02f402c1",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "file": "Investment-Research/Sectors/2026-06-17_Liquid-Cooling.md",
+                "followCursor": false,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-list",
+              "title": "2026-06-17_Liquid-Cooling 的大纲"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:打开快速切换": false,
+      "graph:查看关系图谱": false,
+      "canvas:新建白板": false,
+      "daily-notes:打开/创建今天的日记": false,
+      "templates:插入模板": false,
+      "command-palette:打开命令面板": false,
+      "bases:新建数据库": false
+    }
+  },
+  "active": "c99caead4b3c5131",
+  "lastOpenFiles": [
+    "Investment-Research/Sectors/2026-06-17_Liquid-Cooling.md",
+    "Investment-Research/Stocks/2026-06-17_Hua-Hong-Semiconductor_01347-HK.md",
+    "Investment-Research/Stocks/2026-06-17_Weichai-Power_02338-HK.md",
+    "Investment-Research/Stocks/2026-06-17_SMIC_00981-HK.md"
+  ]
+}

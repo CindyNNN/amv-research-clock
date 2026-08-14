@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "generated_at_utc": "2026-08-14T13:18:38Z",
+  "disclaimer": "研究辅助，不是投资建议。",
+  "as_of": "2026-08-13",
+  "indices": [
+    {
+      "key": "cyb-clock",
+      "name": "创业板 0AMV 满仓",
+      "latest_point": 3528.2949682013486,
+      "annualized_return": 0.21008238111374788,
+      "max_drawdown": -0.2723549473044756,
+      "sharpe": 0.8872365071915326,
+      "exposure": 0.6186017478152309,
+      "position": "空仓"
+    },
+    {
+      "key": "cyb-committee",
+      "name": "五份离场委员会",
+      "latest_point": 3813.9251717242005,
+      "annualized_return": 0.224413266872547,
+      "max_drawdown": -0.2550410754294249,
+      "sharpe": 0.9606843140531671,
+      "exposure": 0.5627965043695381,
+      "position": "空仓"
+    }
+  ]
+}

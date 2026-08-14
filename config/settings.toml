@@ -1,0 +1,13 @@
+data_source = "akshare"
+market = "a_share"
+cache_dir = "data/cache"
+report_dir = "reports"
+tdx_path = ""
+compass_path = "C:\\Softwares\\compass"
+
+[tech_boards]
+board_source = "ths"
+output_dir = "data/tech_boards"
+history_start = "20240101"
+history_period = "daily"
+history_adjust = ""

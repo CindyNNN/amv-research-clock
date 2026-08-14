@@ -1,0 +1,48 @@
+{
+  "schema_version": 1,
+  "data_product": "amv_research_catalog",
+  "generated_at_utc": "2026-08-14T13:18:38Z",
+  "language": [
+    "zh-CN"
+  ],
+  "disclaimer": "研究辅助，不是投资建议。",
+  "disclaimer_long": "本站所有净值、仓位、超额与图表仅供研究观察，不构成投资建议、收益承诺或交易指令。不代客下单，不索取券商账号。",
+  "site_name": "创业板 0AMV 研究时钟",
+  "pages_url_placeholder": "https://<user>.github.io/<repo>/",
+  "expected_update": "每个交易日北京时间 20:00 左右",
+  "amv_phone_workflow": "手机打开 GitHub App → Actions → Build strategy site → Run workflow，在 amv_close 填入今日 0AMV 收盘价，可选 amv_date。",
+  "banners": [
+    "今日 0AMV 未更新，信号沿用上一有效日 2026-08-13。指数/ETF 对比层仍刷新到各自最新日期。",
+    "2026-08-14 的 0AMV 收盘与前一日相同，不作为有效信号；策略序列截至 2026-08-13。",
+    "情绪数据已尝试用同花顺涨跌分布刷新。"
+  ],
+  "freshness": {
+    "amv_as_of": "2026-08-14",
+    "amv_trusted_as_of": "2026-08-13",
+    "emotion_as_of": "2026-08-14",
+    "overlay_as_of": "2026-08-14",
+    "strategy_end": "2026-08-13",
+    "amv_stale": true,
+    "emotion_stale": false
+  },
+  "indices": [
+    {
+      "key": "cyb-clock",
+      "tab": "创业板 0AMV 满仓",
+      "index_name_cn": "创业板 0AMV 满仓",
+      "rule": "amv_emo70_ma60",
+      "role": "live_clock",
+      "agent_url": "data/agent/cyb-clock.json",
+      "full_series_url": "data/cyb-clock.json"
+    },
+    {
+      "key": "cyb-committee",
+      "tab": "五份离场委员会",
+      "index_name_cn": "五份离场委员会",
+      "rule": "sleeves_emo_50_70",
+      "role": "observation",
+      "agent_url": "data/agent/cyb-committee.json",
+      "full_series_url": "data/cyb-committee.json"
+    }
+  ]
+}

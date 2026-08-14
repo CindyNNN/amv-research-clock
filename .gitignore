@@ -1,0 +1,28 @@
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.venv/
+venv/
+.env
+.env.*
+.streamlit/secrets.toml
+*.tmp
+*.log
+
+# Local Compass / TongDaXin exports (contain machine paths)
+data/compass/
+data/dashboard/
+data/tech_boards/
+data/monitor/
+data/cache/
+
+# Local research dumps; site uses committed caches under data/backtests and data/amv
+reports/
+notebooks/
+.superpowers/
+*.png
+*.il
+*.res
+ths_indicators/
+tdx_indicators/

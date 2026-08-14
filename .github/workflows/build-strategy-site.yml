@@ -1,0 +1,82 @@
+name: Build strategy site
+
+on:
+  schedule:
+    - cron: "0 12 * * 1-5"
+  workflow_dispatch:
+    inputs:
+      amv_close:
+        description: "今日 0AMV 收盘价（可选；不填则沿用仓库内上一有效日）"
+        required: false
+        type: string
+      amv_date:
+        description: "0AMV 日期 YYYY-MM-DD（可选，默认北京今天）"
+        required: false
+        type: string
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install package
+        run: python -m pip install -e .
+
+      - name: Build site
+        env:
+          AMV_CLOSE: ${{ inputs.amv_close }}
+          AMV_DATE: ${{ inputs.amv_date }}
+        run: |
+          set -euo pipefail
+          ARGS=()
+          if [ -n "${AMV_CLOSE:-}" ]; then
+            ARGS+=(--amv-close "$AMV_CLOSE")
+          fi
+          if [ -n "${AMV_DATE:-}" ]; then
+            ARGS+=(--amv-date "$AMV_DATE")
+          fi
+          python scripts/build_strategy_site.py "${ARGS[@]}"
+
+      - name: Commit refreshed data
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/amv site/data data/backtests/amv_index_gate data/backtests/cyb_emotion_kdj
+          if git diff --cached --quiet; then
+            echo "No data changes to commit"
+          else
+            git commit -m "chore: refresh strategy site data"
+            git push
+          fi
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
