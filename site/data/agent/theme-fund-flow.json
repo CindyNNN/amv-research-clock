@@ -1,12 +1,57 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "page": "flow",
   "disclaimer": "研究辅助，不是投资建议。",
-  "disclaimer_long": "这是当天资金快照，只看科技相关主题，不是买卖建议。",
+  "disclaimer_long": "这是资金快照，只看科技相关主题，不是买卖建议。",
   "as_of": "2026-08-14",
   "unit": "亿元",
   "total_net": 899.4600000000003,
+  "totals": {
+    "1d": 899.4600000000003,
+    "3d": -1249.3899999999999,
+    "5d": 878.2299999999999,
+    "10d": -350.8,
+    "20d": -2228.7399999999993
+  },
   "count": 31,
+  "windows": [
+    {
+      "id": "1d",
+      "label": "当日",
+      "symbol": "即时",
+      "net_field": "net_amount",
+      "pct_field": "pct_change"
+    },
+    {
+      "id": "3d",
+      "label": "3日",
+      "symbol": "3日排行",
+      "net_field": "net_3d",
+      "pct_field": "pct_3d"
+    },
+    {
+      "id": "5d",
+      "label": "5日",
+      "symbol": "5日排行",
+      "net_field": "net_5d",
+      "pct_field": "pct_5d"
+    },
+    {
+      "id": "10d",
+      "label": "10日",
+      "symbol": "10日排行",
+      "net_field": "net_10d",
+      "pct_field": "pct_10d"
+    },
+    {
+      "id": "20d",
+      "label": "20日",
+      "symbol": "20日排行",
+      "net_field": "net_20d",
+      "pct_field": "pct_20d"
+    }
+  ],
+  "default_window": "1d",
   "rows": [
     {
       "board_name": "液冷服务器",
@@ -17,7 +62,17 @@
       "inflow": 1073.71,
       "outflow": 939.98,
       "leader": "网宿科技",
-      "leader_pct_change": 20.01
+      "leader_pct_change": 20.01,
+      "net_1d": 133.73,
+      "pct_1d": 1.65,
+      "net_3d": -52.03,
+      "pct_3d": 2.21,
+      "net_5d": -14.71,
+      "pct_5d": 3.74,
+      "net_10d": 4.08,
+      "pct_10d": 18.11,
+      "net_20d": -92.41,
+      "pct_20d": 1.42
     },
     {
       "board_name": "共封装光学(CPO)",
@@ -28,7 +83,17 @@
       "inflow": 1582.63,
       "outflow": 1449.87,
       "leader": "金戈新材",
-      "leader_pct_change": 29.98
+      "leader_pct_change": 29.98,
+      "net_1d": 132.76,
+      "pct_1d": 2.94,
+      "net_3d": -21.73,
+      "pct_3d": 4.7,
+      "net_5d": 36.97,
+      "pct_5d": 7.42,
+      "net_10d": -66.94,
+      "pct_10d": 27.82,
+      "net_20d": -15.39,
+      "pct_20d": 1.33
     },
     {
       "board_name": "数据中心(AIDC)",
@@ -39,7 +104,17 @@
       "inflow": 2200.78,
       "outflow": 2106.18,
       "leader": "网宿科技",
-      "leader_pct_change": 20.01
+      "leader_pct_change": 20.01,
+      "net_1d": 94.6,
+      "pct_1d": 0.79,
+      "net_3d": -20.7,
+      "pct_3d": 1.36,
+      "net_5d": 21.96,
+      "pct_5d": 2.53,
+      "net_10d": 66.64,
+      "pct_10d": 14.61,
+      "net_20d": -159.83,
+      "pct_20d": 4.86
     },
     {
       "board_name": "芯片概念",
@@ -50,7 +125,17 @@
       "inflow": 3203.28,
       "outflow": 3114.65,
       "leader": "敏芯股份",
-      "leader_pct_change": 20.01
+      "leader_pct_change": 20.01,
+      "net_1d": 88.63,
+      "pct_1d": 1.52,
+      "net_3d": -87.54,
+      "pct_3d": 1.22,
+      "net_5d": 161.18,
+      "pct_5d": 3.67,
+      "net_10d": -148.53,
+      "pct_10d": 18.4,
+      "net_20d": -277.61,
+      "pct_20d": 1.34
     },
     {
       "board_name": "存储芯片",
@@ -61,7 +146,17 @@
       "inflow": 1307.66,
       "outflow": 1256.85,
       "leader": "阿莱德",
-      "leader_pct_change": 20.0
+      "leader_pct_change": 20.0,
+      "net_1d": 50.82,
+      "pct_1d": 2.27,
+      "net_3d": -64.98,
+      "pct_3d": 1.72,
+      "net_5d": 120.8,
+      "pct_5d": 5.64,
+      "net_10d": -179.08,
+      "pct_10d": 22.15,
+      "net_20d": -77.56,
+      "pct_20d": -3.11
     },
     {
       "board_name": "PCB概念",
@@ -72,7 +167,17 @@
       "inflow": 824.02,
       "outflow": 773.98,
       "leader": "瑞丰高材",
-      "leader_pct_change": 16.09
+      "leader_pct_change": 16.09,
+      "net_1d": 50.04,
+      "pct_1d": 2.08,
+      "net_3d": -61.28,
+      "pct_3d": 1.65,
+      "net_5d": 95.19,
+      "pct_5d": 5.8,
+      "net_10d": -22.9,
+      "pct_10d": 23.81,
+      "net_20d": -8.63,
+      "pct_20d": 0.86
     },
     {
       "board_name": "算力租赁",
@@ -83,7 +188,17 @@
       "inflow": 597.3,
       "outflow": 548.79,
       "leader": "网宿科技",
-      "leader_pct_change": 20.01
+      "leader_pct_change": 20.01,
+      "net_1d": 48.51,
+      "pct_1d": 0.69,
+      "net_3d": -43.33,
+      "pct_3d": 1.78,
+      "net_5d": -26.85,
+      "pct_5d": 1.76,
+      "net_10d": 104.7,
+      "pct_10d": 16.23,
+      "net_20d": -88.83,
+      "pct_20d": 8.36
     },
     {
       "board_name": "人形机器人",
@@ -94,7 +209,17 @@
       "inflow": 926.88,
       "outflow": 889.65,
       "leader": "敏芯股份",
-      "leader_pct_change": 20.01
+      "leader_pct_change": 20.01,
+      "net_1d": 37.23,
+      "pct_1d": 0.6,
+      "net_3d": -0.84,
+      "pct_3d": 0.61,
+      "net_5d": 56.09,
+      "pct_5d": 2.02,
+      "net_10d": -19.33,
+      "pct_10d": 14.48,
+      "net_20d": -124.85,
+      "pct_20d": 1.47
     },
     {
       "board_name": "铜缆高速连接",
@@ -105,7 +230,17 @@
       "inflow": 224.77,
       "outflow": 188.1,
       "leader": "中富电路",
-      "leader_pct_change": 11.74
+      "leader_pct_change": 11.74,
+      "net_1d": 36.67,
+      "pct_1d": 2.33,
+      "net_3d": -10.49,
+      "pct_3d": 3.15,
+      "net_5d": 5.89,
+      "pct_5d": 5.03,
+      "net_10d": -4.71,
+      "pct_10d": 23.44,
+      "net_20d": -15.61,
+      "pct_20d": 1.18
     },
     {
       "board_name": "稀土永磁",
@@ -116,7 +251,17 @@
       "inflow": 159.24,
       "outflow": 123.63,
       "leader": "金田股份",
-      "leader_pct_change": 10.05
+      "leader_pct_change": 10.05,
+      "net_1d": 35.61,
+      "pct_1d": 2.07,
+      "net_3d": -45.01,
+      "pct_3d": -1.12,
+      "net_5d": 15.33,
+      "pct_5d": 2.26,
+      "net_10d": 4.47,
+      "pct_10d": 13.21,
+      "net_20d": -19.78,
+      "pct_20d": 6.38
     },
     {
       "board_name": "东数西算(算力)",
@@ -127,7 +272,17 @@
       "inflow": 1292.14,
       "outflow": 1258.82,
       "leader": "网宿科技",
-      "leader_pct_change": 20.01
+      "leader_pct_change": 20.01,
+      "net_1d": 33.32,
+      "pct_1d": 0.78,
+      "net_3d": -74.59,
+      "pct_3d": 1.51,
+      "net_5d": -32.41,
+      "pct_5d": 2.15,
+      "net_10d": 109.92,
+      "pct_10d": 15.52,
+      "net_20d": -170.18,
+      "pct_20d": 5.7
     },
     {
       "board_name": "小金属概念",
@@ -138,7 +293,17 @@
       "inflow": 474.9,
       "outflow": 446.34,
       "leader": "成都路桥",
-      "leader_pct_change": 10.1
+      "leader_pct_change": 10.1,
+      "net_1d": 28.57,
+      "pct_1d": 0.63,
+      "net_3d": -215.86,
+      "pct_3d": -3.17,
+      "net_5d": 65.63,
+      "pct_5d": 1.19,
+      "net_10d": 8.73,
+      "pct_10d": 11.0,
+      "net_20d": -77.23,
+      "pct_20d": 8.59
     },
     {
       "board_name": "小金属",
@@ -149,7 +314,17 @@
       "inflow": 170.48,
       "outflow": 142.1,
       "leader": "中国稀土",
-      "leader_pct_change": 10.0
+      "leader_pct_change": 10.0,
+      "net_1d": 28.38,
+      "pct_1d": 1.99,
+      "net_3d": -47.52,
+      "pct_3d": -3.27,
+      "net_5d": 6.24,
+      "pct_5d": 2.37,
+      "net_10d": 0.91,
+      "pct_10d": 19.43,
+      "net_20d": -9.34,
+      "pct_20d": 10.42
     },
     {
       "board_name": "商业航天",
@@ -160,7 +335,17 @@
       "inflow": 963.31,
       "outflow": 939.71,
       "leader": "蓝盾光电",
-      "leader_pct_change": 20.0
+      "leader_pct_change": 20.0,
+      "net_1d": 23.6,
+      "pct_1d": 0.8,
+      "net_3d": -111.6,
+      "pct_3d": -0.08,
+      "net_5d": 16.65,
+      "pct_5d": 1.8,
+      "net_10d": -31.03,
+      "pct_10d": 13.87,
+      "net_20d": -105.1,
+      "pct_20d": 2.65
     },
     {
       "board_name": "MCU芯片",
@@ -171,7 +356,17 @@
       "inflow": 314.24,
       "outflow": 291.43,
       "leader": "盈新发展",
-      "leader_pct_change": 10.18
+      "leader_pct_change": 10.18,
+      "net_1d": 22.8,
+      "pct_1d": 1.4,
+      "net_3d": 18.26,
+      "pct_3d": 1.38,
+      "net_5d": 21.95,
+      "pct_5d": 2.59,
+      "net_10d": -85.01,
+      "pct_10d": 13.69,
+      "net_20d": -37.48,
+      "pct_20d": -3.24
     },
     {
       "board_name": "光刻机",
@@ -182,7 +377,17 @@
       "inflow": 173.18,
       "outflow": 151.78,
       "leader": "中瓷电子",
-      "leader_pct_change": 10.0
+      "leader_pct_change": 10.0,
+      "net_1d": 21.4,
+      "pct_1d": 2.42,
+      "net_3d": 3.04,
+      "pct_3d": 2.58,
+      "net_5d": 11.42,
+      "pct_5d": 6.02,
+      "net_10d": -2.3,
+      "pct_10d": 24.04,
+      "net_20d": -7.1,
+      "pct_20d": -0.89
     },
     {
       "board_name": "电子化学品",
@@ -193,7 +398,17 @@
       "inflow": 171.56,
       "outflow": 155.37,
       "leader": "中石科技",
-      "leader_pct_change": 20.01
+      "leader_pct_change": 20.01,
+      "net_1d": 16.19,
+      "pct_1d": 4.07,
+      "net_3d": -18.84,
+      "pct_3d": 2.1,
+      "net_5d": 9.09,
+      "pct_5d": 6.31,
+      "net_10d": -7.1,
+      "pct_10d": 26.52,
+      "net_20d": -7.99,
+      "pct_20d": -2.74
     },
     {
       "board_name": "光刻胶",
@@ -204,7 +419,17 @@
       "inflow": 137.22,
       "outflow": 123.76,
       "leader": "阿拉丁",
-      "leader_pct_change": 10.88
+      "leader_pct_change": 10.88,
+      "net_1d": 13.46,
+      "pct_1d": 2.08,
+      "net_3d": -13.85,
+      "pct_3d": 0.76,
+      "net_5d": 7.81,
+      "pct_5d": 4.66,
+      "net_10d": 4.33,
+      "pct_10d": 21.72,
+      "net_20d": -23.37,
+      "pct_20d": -0.04
     },
     {
       "board_name": "钙钛矿电池",
@@ -215,7 +440,17 @@
       "inflow": 198.29,
       "outflow": 184.94,
       "leader": "逸飞激光",
-      "leader_pct_change": 9.35
+      "leader_pct_change": 9.35,
+      "net_1d": 13.35,
+      "pct_1d": 1.0,
+      "net_3d": -8.5,
+      "pct_3d": 0.51,
+      "net_5d": 10.6,
+      "pct_5d": 2.68,
+      "net_10d": 1.26,
+      "pct_10d": 14.71,
+      "net_20d": 5.75,
+      "pct_20d": 2.17
     },
     {
       "board_name": "无人机",
@@ -226,7 +461,17 @@
       "inflow": 588.79,
       "outflow": 578.41,
       "leader": "中石科技",
-      "leader_pct_change": 20.01
+      "leader_pct_change": 20.01,
+      "net_1d": 10.38,
+      "pct_1d": 0.77,
+      "net_3d": -54.61,
+      "pct_3d": -0.06,
+      "net_5d": 12.15,
+      "pct_5d": 2.08,
+      "net_10d": 20.32,
+      "pct_10d": 12.85,
+      "net_20d": -111.94,
+      "pct_20d": 4.59
     },
     {
       "board_name": "低空经济",
@@ -237,7 +482,17 @@
       "inflow": 626.99,
       "outflow": 619.52,
       "leader": "金博股份",
-      "leader_pct_change": 13.56
+      "leader_pct_change": 13.56,
+      "net_1d": 7.47,
+      "pct_1d": 0.52,
+      "net_3d": -51.72,
+      "pct_3d": -0.18,
+      "net_5d": -14.02,
+      "pct_5d": 1.21,
+      "net_10d": 12.78,
+      "pct_10d": 10.98,
+      "net_20d": -125.83,
+      "pct_20d": 4.1
     },
     {
       "board_name": "卫星导航",
@@ -248,7 +503,17 @@
       "inflow": 491.4,
       "outflow": 487.13,
       "leader": "中瓷电子",
-      "leader_pct_change": 10.0
+      "leader_pct_change": 10.0,
+      "net_1d": 4.27,
+      "pct_1d": 0.74,
+      "net_3d": -47.59,
+      "pct_3d": 0.15,
+      "net_5d": -25.11,
+      "pct_5d": 1.87,
+      "net_10d": -4.42,
+      "pct_10d": 15.45,
+      "net_20d": -69.68,
+      "pct_20d": 3.7
     },
     {
       "board_name": "减速器",
@@ -259,7 +524,17 @@
       "inflow": 126.24,
       "outflow": 123.46,
       "leader": "斯莱克",
-      "leader_pct_change": 6.9
+      "leader_pct_change": 6.9,
+      "net_1d": 2.77,
+      "pct_1d": 0.01,
+      "net_3d": 9.09,
+      "pct_3d": 0.28,
+      "net_5d": 1.09,
+      "pct_5d": 1.67,
+      "net_10d": 16.22,
+      "pct_10d": 12.53,
+      "net_20d": -17.37,
+      "pct_20d": 2.66
     },
     {
       "board_name": "半导体",
@@ -270,7 +545,17 @@
       "inflow": 1126.7,
       "outflow": 1126.11,
       "leader": "敏芯股份",
-      "leader_pct_change": 20.01
+      "leader_pct_change": 20.01,
+      "net_1d": 0.59,
+      "pct_1d": 1.86,
+      "net_3d": -10.93,
+      "pct_3d": 1.47,
+      "net_5d": 119.46,
+      "pct_5d": 5.21,
+      "net_10d": -159.81,
+      "pct_10d": 21.1,
+      "net_20d": -94.45,
+      "pct_20d": -4.89
     },
     {
       "board_name": "汽车芯片",
@@ -281,7 +566,17 @@
       "inflow": 553.87,
       "outflow": 555.37,
       "leader": "联芸科技",
-      "leader_pct_change": 11.26
+      "leader_pct_change": 11.26,
+      "net_1d": -1.5,
+      "pct_1d": 1.43,
+      "net_3d": -12.48,
+      "pct_3d": 1.44,
+      "net_5d": 55.42,
+      "pct_5d": 3.36,
+      "net_10d": -98.66,
+      "pct_10d": 16.71,
+      "net_20d": -108.76,
+      "pct_20d": -2.62
     },
     {
       "board_name": "机器视觉",
@@ -292,7 +587,17 @@
       "inflow": 353.55,
       "outflow": 355.29,
       "leader": "越剑智能",
-      "leader_pct_change": 10.02
+      "leader_pct_change": 10.02,
+      "net_1d": -1.74,
+      "pct_1d": 0.84,
+      "net_3d": -7.54,
+      "pct_3d": 0.68,
+      "net_5d": 8.88,
+      "pct_5d": 2.29,
+      "net_10d": 51.48,
+      "pct_10d": 15.51,
+      "net_20d": -60.32,
+      "pct_20d": 2.44
     },
     {
       "board_name": "工业母机",
@@ -303,7 +608,17 @@
       "inflow": 148.27,
       "outflow": 150.74,
       "leader": "万讯自控",
-      "leader_pct_change": 6.61
+      "leader_pct_change": 6.61,
+      "net_1d": -2.47,
+      "pct_1d": 0.67,
+      "net_3d": -26.88,
+      "pct_3d": 0.51,
+      "net_5d": 2.66,
+      "pct_5d": 2.75,
+      "net_10d": 11.58,
+      "pct_10d": 16.89,
+      "net_20d": 2.36,
+      "pct_20d": 4.28
     },
     {
       "board_name": "钛白粉概念",
@@ -314,7 +629,17 @@
       "inflow": 8.0,
       "outflow": 10.49,
       "leader": "道恩股份",
-      "leader_pct_change": 0.82
+      "leader_pct_change": 0.82,
+      "net_1d": -2.49,
+      "pct_1d": -0.47,
+      "net_3d": -4.87,
+      "pct_3d": -4.05,
+      "net_5d": -2.29,
+      "pct_5d": -2.09,
+      "net_10d": -0.26,
+      "pct_10d": 3.57,
+      "net_20d": -1.72,
+      "pct_20d": -0.11
     },
     {
       "board_name": "先进封装",
@@ -325,7 +650,17 @@
       "inflow": 923.68,
       "outflow": 926.24,
       "leader": "中富电路",
-      "leader_pct_change": 11.74
+      "leader_pct_change": 11.74,
+      "net_1d": -2.56,
+      "pct_1d": 2.12,
+      "net_3d": -53.82,
+      "pct_3d": 1.83,
+      "net_5d": 88.63,
+      "pct_5d": 5.28,
+      "net_10d": -55.08,
+      "pct_10d": 22.27,
+      "net_20d": -46.56,
+      "pct_20d": -1.49
     },
     {
       "board_name": "机器人概念",
@@ -336,7 +671,17 @@
       "inflow": 1746.28,
       "outflow": 1757.45,
       "leader": "敏芯股份",
-      "leader_pct_change": 20.01
+      "leader_pct_change": 20.01,
+      "net_1d": -11.16,
+      "pct_1d": 0.48,
+      "net_3d": -63.87,
+      "pct_3d": 0.23,
+      "net_5d": -4.39,
+      "pct_5d": 1.84,
+      "net_10d": 120.85,
+      "pct_10d": 12.5,
+      "net_20d": -223.73,
+      "pct_20d": 3.26
     },
     {
       "board_name": "第三代半导体",
@@ -347,7 +692,17 @@
       "inflow": 567.32,
       "outflow": 581.09,
       "leader": "金博股份",
-      "leader_pct_change": 13.56
+      "leader_pct_change": 13.56,
+      "net_1d": -13.77,
+      "pct_1d": 1.52,
+      "net_3d": -46.78,
+      "pct_3d": 1.64,
+      "net_5d": 46.92,
+      "pct_5d": 5.13,
+      "net_10d": -3.91,
+      "pct_10d": 21.38,
+      "net_20d": -58.2,
+      "pct_20d": 0.54
     }
   ],
   "banners": [
@@ -355,11 +710,12 @@
   ],
   "methodology": {
     "范围": "只保留名字对得上 PCB、CPO、机器人、液冷、商业航天、稀土、小金属、半导体相关的概念或行业板块。",
-    "口径": "东财即时资金流（概念+行业），净额单位按源数据，一般为亿元。",
+    "口径": "同花顺概念/行业资金流：当日是即时净额，3日、5日、10日、20日是阶段累计净额，单位一般为亿元。",
     "注意": "和「板块轮动」页用的行业 ETF 不是同一套名单，不能直接对照持仓。同一只股票也可能出现在多个板块里，上面的合计净流入会重复计算。"
   },
   "risk_notes": [
     "资金流是盘中或收盘快照，隔天会变，也不代表后面一定涨。",
+    "3日到20日是阶段累计，不是把当日简单加总。",
     "板块名字靠关键词归类，个别板块可能归得不准。",
     "研究辅助，不是投资建议。"
   ]

@@ -58,15 +58,21 @@
       </section>
 
       <section class="table-panel" id="holdings-panel" hidden>
-        <h2>现在拿着什么</h2>
+        <h2>当时拿着什么</h2>
+        <p class="holdings-controls">
+          <label>看哪一天
+            <input id="holdings-date" type="date" />
+          </label>
+          <button type="button" id="holdings-latest">回到最新</button>
+        </p>
         <p class="muted" id="holdings-note"></p>
         <div class="table-wrap">
           <table>
             <thead>
               <tr>
-                <th>ETF</th>
+                <th>标的</th>
                 <th>主题</th>
-                <th>权重</th>
+                <th>仓位</th>
                 <th>说明</th>
               </tr>
             </thead>
@@ -99,8 +105,11 @@
 
     <div id="flow-view" hidden>
       <section class="chart-panel">
-        <h2>净流入排行</h2>
-        <p class="muted" id="flow-chart-note">红的是净流入，绿的是净流出。单位：亿元。</p>
+        <div class="chart-toolbar">
+          <div class="chips" id="flow-window-chips"></div>
+        </div>
+        <h2 id="flow-chart-title">净流入排行</h2>
+        <p class="muted" id="flow-chart-note">红的是净流入，绿的是净流出。单位：亿元。3日到20日是阶段累计，不是把当日加总。</p>
         <div class="flow-bars" id="flow-bars"></div>
       </section>
       <section class="table-panel">
@@ -111,8 +120,12 @@
               <tr>
                 <th>板块</th>
                 <th>主题</th>
-                <th>涨跌</th>
-                <th>净流入</th>
+                <th>当日涨跌</th>
+                <th>当日净流入</th>
+                <th>3日</th>
+                <th>5日</th>
+                <th>10日</th>
+                <th>20日</th>
                 <th>领涨股</th>
               </tr>
             </thead>

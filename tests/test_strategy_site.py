@@ -148,3 +148,54 @@ def test_rotation_holdings_parses_codes() -> None:
     assert [row["code"] for row in out["rows"]] == ["512480", "515880"]
     assert out["rows"][0]["name"] == "半导体ETF"
     assert out["rows"][1]["note"]
+
+
+def test_rotation_holdings_as_of_uses_last_trading_day() -> None:
+    from ai_invest_advisor.strategy_site import rotation_holdings
+
+    daily = pd.DataFrame(
+        {
+            "date": pd.to_datetime(["2026-01-05", "2026-01-06", "2026-02-03"]),
+            "held": ["512480", "512480", "515880,159819"],
+            "n_held": [1, 1, 2],
+            "traded": [1, 0, 1],
+            "equity": [1.0, 1.01, 1.02],
+        }
+    )
+    jan = rotation_holdings(daily, as_of="2026-01-10")
+    assert jan["as_of"] == "2026-01-06"
+    assert [row["code"] for row in jan["rows"]] == ["512480"]
+    assert jan["last_rebalance"] == "2026-01-05"
+
+
+def test_merge_flow_windows_joins_periods() -> None:
+    from ai_invest_advisor.site_fund_flow import merge_flow_windows
+
+    day = pd.DataFrame(
+        {
+            "board_name": ["光模块", "PCB概念"],
+            "board_type": ["concept", "concept"],
+            "theme": ["CPO", "PCB"],
+            "pct_change": [2.0, 1.0],
+            "net_amount": [10.0, 5.0],
+            "inflow": [12.0, 6.0],
+            "outflow": [2.0, 1.0],
+            "leader": ["A", "B"],
+            "leader_pct_change": [3.0, 1.0],
+        }
+    )
+    three = pd.DataFrame(
+        {
+            "board_name": ["光模块"],
+            "board_type": ["concept"],
+            "theme": ["CPO"],
+            "pct_change": [5.0],
+            "net_amount": [30.0],
+        }
+    )
+    out = merge_flow_windows({"1d": day, "3d": three})
+    optical = out.loc[out["board_name"] == "光模块"].iloc[0]
+    assert float(optical["net_amount"]) == 10.0
+    assert float(optical["net_3d"]) == 30.0
+    pcb = out.loc[out["board_name"] == "PCB概念"].iloc[0]
+    assert pd.isna(pcb["net_3d"])

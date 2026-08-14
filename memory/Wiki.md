@@ -41,7 +41,8 @@ Mapped in `src/ai_invest_advisor/sector_etf_universe.py` and `data/sector_etfs/u
 - Static pages in `site/`, JSON under `site/data/`. Builder: `scripts/build_strategy_site.py`.
 - Three pages: ChiNext timing (full-lot + five-sleeve inner tabs); monthly 120d equal-weight top-2 sector ETF rotation (overlay only, `m120_k2_raw_gate`); tech-theme Eastmoney fund flow.
 - Cloud 0AMV: `data/amv/0amv_daily.csv`. GitHub Actions weekdays 12:00 UTC. Phone path: page button「录入 0AMV」or Actions `amv_close`.
-- Fund-flow snapshot committed at `data/site/theme_fund_flow.csv`. If today's fetch fails, the flow page keeps the last snapshot and says so.
+- Fund-flow snapshot committed at `data/site/theme_fund_flow.csv`. Windows: 当日 / 3日 / 5日 / 10日 / 20日 (Tonghuashun `即时` and `N日排行`). If today's fetch fails, the flow page keeps the last snapshot and says so.
+- ChiNext and rotation pages can inspect holdings on a chosen date (date picker or click the NAV curve). Rotation series stores `held` / `traded` per day.
 - Overlays on ChiNext page: 000001 / 399001 / 399006 / 000300 / 159915. Rotation page overlays: ChiNext full-lot, 上证, 深成, 159915.
 
 ## Disclaimer

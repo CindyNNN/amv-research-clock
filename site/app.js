@@ -31,6 +31,8 @@
       rotation: "cyb-clock",
     },
     chart: null,
+    holdingsDate: null,
+    flowWindow: "1d",
   };
 
   const $ = (id) => document.getElementById(id);
@@ -60,6 +62,62 @@
   function fmtYi(x) {
     if (x === null || x === undefined || Number.isNaN(x)) return "—";
     return fmtNum(x, 2) + " 亿";
+  }
+
+  function flowWindows(page) {
+    return (page && page.windows && page.windows.length)
+      ? page.windows
+      : [
+          { id: "1d", label: "当日", net_field: "net_amount", pct_field: "pct_change" },
+          { id: "3d", label: "3日", net_field: "net_3d", pct_field: "pct_3d" },
+          { id: "5d", label: "5日", net_field: "net_5d", pct_field: "pct_5d" },
+          { id: "10d", label: "10日", net_field: "net_10d", pct_field: "pct_10d" },
+          { id: "20d", label: "20日", net_field: "net_20d", pct_field: "pct_20d" },
+        ];
+  }
+
+  function flowWindowMeta(page, id) {
+    return flowWindows(page).find((w) => w.id === id) || flowWindows(page)[0];
+  }
+
+  function flowWindowLabel(page, id) {
+    return (flowWindowMeta(page, id) || {}).label || "当日";
+  }
+
+  function flowNet(page, id) {
+    if (page.totals && page.totals[id] != null) return page.totals[id];
+    const field = (flowWindowMeta(page, id) || {}).net_field || "net_amount";
+    return (page.rows || []).reduce((sum, row) => sum + (Number(row[field]) || 0), 0);
+  }
+
+  function lastSeriesOnOrBefore(series, isoDate) {
+    if (!series || !series.length) return null;
+    if (!isoDate) return series[series.length - 1];
+    let found = null;
+    for (let i = 0; i < series.length; i += 1) {
+      if (series[i].date <= isoDate) found = series[i];
+      else break;
+    }
+    return found || series[0];
+  }
+
+  function lastChangeDate(series, isoDate, field) {
+    const row = lastSeriesOnOrBefore(series, isoDate);
+    if (!row) return null;
+    let last = null;
+    let seen = null;
+    for (let i = 0; i < series.length; i += 1) {
+      const cur = series[i];
+      if (cur.date > row.date) break;
+      if (field === "traded") {
+        if (Number(cur.traded || 0) === 1) last = cur.date;
+        continue;
+      }
+      const value = String(cur[field] || "");
+      if (seen != null && value !== seen) last = cur.date;
+      seen = value;
+    }
+    return last;
   }
 
   function tickClock() {
@@ -164,18 +222,27 @@
     $("strategy-view").hidden = isFlow;
     $("flow-view").hidden = !isFlow;
     $("mode-toggle").hidden = state.pageId !== "cyb";
-    $("holdings-panel").hidden = state.pageId !== "rotation";
+    $("holdings-panel").hidden = isFlow;
     $("year-panel").hidden = isFlow;
-    $("hero-point-label").textContent = isFlow ? "主题合计净流入" : "最新净值";
+    $("hero-point-label").textContent = isFlow
+      ? flowWindowLabel(state.page, state.flowWindow) + "合计净流入"
+      : "最新净值";
   }
 
   function renderCards(page) {
     if (state.pageId === "flow") {
-      const total = page.total_net;
+      const totals = page.totals || {};
+      const total = flowNet(page, state.flowWindow);
+      const windowLabel = flowWindowLabel(page, state.flowWindow);
       const items = [
         { k: "数据日期", v: page.as_of || "—", c: "", s: "拉不到就沿用上次" },
-        { k: "主题合计净流入", v: fmtYi(total), c: clsRet(total), s: page.unit || "亿元" },
+        { k: windowLabel + "合计净流入", v: fmtYi(total), c: clsRet(total), s: page.unit || "亿元；板块会重叠" },
         { k: "覆盖板块", v: String(page.count || 0), c: "", s: "只看科技相关主题" },
+        { k: "当日合计", v: fmtYi(totals["1d"] ?? page.total_net), c: clsRet(totals["1d"] ?? page.total_net), s: "即时净额" },
+        { k: "3日合计", v: fmtYi(totals["3d"]), c: clsRet(totals["3d"]), s: "阶段累计" },
+        { k: "5日合计", v: fmtYi(totals["5d"]), c: clsRet(totals["5d"]), s: "阶段累计" },
+        { k: "10日合计", v: fmtYi(totals["10d"]), c: clsRet(totals["10d"]), s: "阶段累计" },
+        { k: "20日合计", v: fmtYi(totals["20d"]), c: clsRet(totals["20d"]), s: "阶段累计" },
       ];
       $("metric-cards").innerHTML = items
         .map(
@@ -213,8 +280,8 @@
   function renderHero(page) {
     if (state.pageId === "flow") {
       $("hero-name").textContent = "科技主题资金流入";
-      $("hero-sub").textContent = "当天资金快照，不是买卖建议。和上一页的 ETF 名单不是同一套口径。";
-      $("latest-point").textContent = fmtYi(page.total_net);
+      $("hero-sub").textContent = "资金快照，不是买卖建议。和上一页的 ETF 名单不是同一套口径。3日到20日是阶段累计。";
+      $("latest-point").textContent = fmtYi(flowNet(page, state.flowWindow));
       $("point-asof").textContent = page.as_of ? `数据停在 ${page.as_of}` : "暂无数据";
       $("asof-chip").textContent = page.as_of ? `资金流 ${page.as_of}` : "资金流暂无";
       return;
@@ -319,6 +386,11 @@
       autoSize: true,
     });
     state.chart = chart;
+    chart.subscribeClick((param) => {
+      if (!param || param.time == null) return;
+      const time = typeof param.time === "string" ? param.time : String(param.time);
+      setHoldingsDate(time);
+    });
     if (state.mode === "kline" && page.etf_ohlc && state.pageId === "cyb") {
       const candles = filterByPeriod(page.etf_ohlc).map((r) => ({
         time: r.date,
@@ -398,41 +470,131 @@
       .join("");
   }
 
+  function setHoldingsDate(isoDate) {
+    const page = state.page;
+    if (!page || !page.series || !page.series.length) return;
+    const row = lastSeriesOnOrBefore(page.series, isoDate);
+    state.holdingsDate = row ? row.date : isoDate;
+    const input = $("holdings-date");
+    if (input && state.holdingsDate) input.value = state.holdingsDate;
+    renderHoldings(page);
+  }
+
+  function etfMeta(page, code) {
+    const uni = page.etf_universe || [];
+    return uni.find((item) => item.code === code) || { code, name: code, theme: "", note: "" };
+  }
+
   function renderHoldings(page) {
     const panel = $("holdings-panel");
-    if (state.pageId !== "rotation") {
+    if (state.pageId === "flow") {
       panel.hidden = true;
       return;
     }
     panel.hidden = false;
-    const holdings = page.holdings || { rows: [], empty: true };
-    const last = holdings.last_rebalance ? `最近一次换仓 ${holdings.last_rebalance}。` : "";
-    if (holdings.empty) {
-      $("holdings-note").textContent = "现在空仓。" + (last || "创业板有仓才选板块。");
+    const series = page.series || [];
+    const input = $("holdings-date");
+    if (input && series.length) {
+      input.min = series[0].date;
+      input.max = series[series.length - 1].date;
+      if (!state.holdingsDate) state.holdingsDate = series[series.length - 1].date;
+      input.value = state.holdingsDate;
+    }
+    const row = lastSeriesOnOrBefore(series, state.holdingsDate);
+    if (!row) {
+      $("holdings-note").textContent = "这一天还没有记录。";
       $("holdings-body").innerHTML = `<tr><td colspan="4">没有持仓</td></tr>`;
       return;
     }
-    $("holdings-note").textContent = last + "两只等权，只作对照。";
-    $("holdings-body").innerHTML = holdings.rows
-      .map((row) => {
-        const weight = row.weight != null ? fmtPct(row.weight, 0) : "—";
-        return `<tr><td>${row.name} ${row.code}</td><td>${row.theme || "—"}</td><td>${weight}</td><td>${row.note || "—"}</td></tr>`;
-      })
-      .join("");
+    const asOf = row.date;
+    const latest = series.length ? series[series.length - 1].date : asOf;
+    const isLatest = asOf === latest;
+    if (page.page === "rotation" || (page.index && page.index.key === "sector-rotation")) {
+      const codes = String(row.held || "").split(",").filter(Boolean);
+      const last = lastChangeDate(series, asOf, "traded");
+      const lastText = last ? `最近一次换仓 ${last}。` : "";
+      if (!codes.length) {
+        $("holdings-note").textContent =
+          (isLatest ? "这一天空仓。" : `${asOf} 空仓。`) +
+          (lastText || "创业板有仓才选板块。");
+        $("holdings-body").innerHTML = `<tr><td colspan="4">没有持仓</td></tr>`;
+        return;
+      }
+      const weight = 1 / codes.length;
+      $("holdings-note").textContent =
+        `${asOf} 拿着 ${codes.length} 只，等权。` + lastText + (isLatest ? "" : "点「回到最新」可看今天。");
+      $("holdings-body").innerHTML = codes
+        .map((code) => {
+          const meta = etfMeta(page, code);
+          return `<tr><td>${meta.name} ${code}</td><td>${meta.theme || "—"}</td><td>${fmtPct(weight, 0)}</td><td>${meta.note || "—"}</td></tr>`;
+        })
+        .join("");
+      return;
+    }
+    const n = (page.position && page.position.n) || 5;
+    const units = row.units != null ? Number(row.units) : Number(row.position || 0) * n;
+    const weight = n ? units / n : Number(row.position || 0);
+    const last = lastChangeDate(series, asOf, "units") || lastChangeDate(series, asOf, "position");
+    const meta = page.holdings_meta || { code: "159915", name: "创业板ETF", theme: "创业板" };
+    let label = "空仓";
+    if (units <= 0) label = "空仓";
+    else if (units >= n) label = "满仓";
+    else label = `${Math.round(units * 10) / 10}/${n}`;
+    let note = isLatest ? "按收盘估算。" : `这是 ${asOf} 收盘时的仓位。`;
+    if (row.action === "schedule_entry") note = "当天收盘确认买入，第二天开盘才会成交。";
+    if (row.action === "schedule_exit") note = "当天收盘确认卖出，第二天开盘才会成交。";
+    if (last) note += ` 最近一次变仓 ${last}。`;
+    $("holdings-note").textContent = `${asOf}：${label}。` + note;
+    if (units <= 0) {
+      $("holdings-body").innerHTML = `<tr><td colspan="4">没有持仓</td></tr>`;
+      return;
+    }
+    $("holdings-body").innerHTML =
+      `<tr><td>${meta.name} ${meta.code || "159915"}</td><td>${meta.theme || "创业板"}</td><td>${label}（${fmtPct(weight, 0)}）</td><td>${note}</td></tr>`;
+  }
+
+  function renderFlowWindowChips(page) {
+    const box = $("flow-window-chips");
+    if (!box) return;
+    box.innerHTML = "";
+    flowWindows(page).forEach((win) => {
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.textContent = win.label;
+      btn.className = win.id === state.flowWindow ? "active" : "";
+      btn.addEventListener("click", () => {
+        state.flowWindow = win.id;
+        renderHero(page);
+        renderCards(page);
+        renderFlowWindowChips(page);
+        renderFlow(page);
+        setChrome();
+      });
+      box.appendChild(btn);
+    });
   }
 
   function renderFlow(page) {
-    const rows = page.rows || [];
-    const maxAbs = Math.max(...rows.map((r) => Math.abs(r.net_amount || 0)), 0.01);
+    const meta = flowWindowMeta(page, state.flowWindow);
+    const field = (meta && meta.net_field) || "net_amount";
+    const label = (meta && meta.label) || "当日";
+    const rows = [...(page.rows || [])].sort(
+      (a, b) => Math.abs(Number(b[field]) || 0) - Math.abs(Number(a[field]) || 0) || (Number(b[field]) || 0) - (Number(a[field]) || 0)
+    );
+    rows.sort((a, b) => (Number(b[field]) || 0) - (Number(a[field]) || 0));
+    const title = $("flow-chart-title");
+    if (title) title.textContent = label + "净流入排行";
+    const maxAbs = Math.max(...rows.map((r) => Math.abs(Number(r[field]) || 0)), 0.01);
     $("flow-bars").innerHTML = rows
       .map((row) => {
-        const net = row.net_amount || 0;
+        const net = Number(row[field]) || 0;
         const width = Math.max(2, (Math.abs(net) / maxAbs) * 100);
         const cls = net >= 0 ? "up" : "down";
         return `<div class="flow-bar-row"><div class="flow-bar-name">${row.board_name}</div><div class="flow-bar-track"><div class="flow-bar-fill ${cls}" style="width:${width}%"></div></div><div class="flow-bar-val ${cls}">${fmtYi(net)}</div></div>`;
       })
       .join("");
     const typeLabel = { concept: "概念", industry: "行业" };
+    const yiCell = (value) => `<td class="${clsRet(value)}">${fmtYi(value)}</td>`;
     $("flow-body").innerHTML = rows
       .map((row) => {
         const type = typeLabel[row.board_type] || row.board_type || "";
@@ -440,8 +602,7 @@
           ? `${row.leader}${row.leader_pct_change != null ? " " + fmtNum(row.leader_pct_change, 2) + "%" : ""}`
           : "—";
         const pct = row.pct_change == null ? "—" : ((row.pct_change > 0 ? "+" : "") + fmtNum(row.pct_change, 2) + "%");
-        return `<tr><td>${row.board_name}${type ? `（${type}）` : ""}</td><td>${row.theme || "—"}</td><td class="${clsRet(row.pct_change)}">${pct}</td><td class="${clsRet(row.net_amount)}">${fmtYi(row.net_amount)}</td><td class="${clsRet(row.leader_pct_change)}">${leader}</td></tr>`;
-        return `<tr><td>${row.board_name}${type ? `（${type}）` : ""}</td><td>${row.theme || "—"}</td><td class="${clsRet(row.pct_change)}">${pct}</td><td class="${clsRet(row.net_amount)}">${fmtYi(row.net_amount)}</td><td>${leader}</td></tr>`;
+        return `<tr><td>${row.board_name}${type ? `（${type}）` : ""}</td><td>${row.theme || "—"}</td><td class="${clsRet(row.pct_change)}">${pct}</td>${yiCell(row.net_amount ?? row.net_1d)}${yiCell(row.net_3d)}${yiCell(row.net_5d)}${yiCell(row.net_10d)}${yiCell(row.net_20d)}<td class="${clsRet(row.leader_pct_change)}">${leader}</td></tr>`;
       })
       .join("");
   }
@@ -469,6 +630,8 @@
     if (pageId !== "cyb") state.mode = "nav";
     const page = await loadJson(agentUrl(pageId, state.key));
     state.page = page;
+    state.holdingsDate = (page.series && page.series.length) ? page.series[page.series.length - 1].date : null;
+    if (page.default_window) state.flowWindow = page.default_window;
     if (page.default_overlays && pageId === "rotation") {
       const selected = overlays();
       if (![...selected].some((k) => (page.overlays || []).some((ov) => ov.key === k))) {
@@ -485,6 +648,7 @@
     const catalogBanners = state.catalog.banners || [];
     if (pageId === "flow") {
       showBanners(page.banners || []);
+      renderFlowWindowChips(page);
       renderFlow(page);
     } else {
       showBanners([...catalogBanners, ...(page.banners || [])]);
@@ -507,6 +671,13 @@
     const pageId = state.pageId === "rotation" ? "rotation" : "cyb";
     state.benchmarkByPage[pageId] = e.target.value;
     renderYearTable(state.page);
+  });
+  $("holdings-date").addEventListener("change", (e) => {
+    setHoldingsDate(e.target.value);
+  });
+  $("holdings-latest").addEventListener("click", () => {
+    const series = (state.page && state.page.series) || [];
+    if (series.length) setHoldingsDate(series[series.length - 1].date);
   });
 
   function beijingDateISO() {

@@ -330,16 +330,42 @@ def strategy_nav_overlay(daily: pd.DataFrame, dates: pd.Series) -> pd.DataFrame:
     return aligned
 
 
+def daily_on_or_before(daily: pd.DataFrame, as_of: str | date | None = None) -> pd.DataFrame:
+    if daily.empty:
+        return daily.copy()
+    frame = daily.copy()
+    stamp = pd.to_datetime(frame["date"]).dt.normalize()
+    cut = stamp.max() if as_of is None else pd.Timestamp(as_of).normalize()
+    return frame.loc[stamp <= cut].copy()
+
+
 def sector_etf_lookup() -> dict[str, Any]:
     return {item.spec.code: item for item in SECTOR_ETF_UNIVERSE}
 
 
-def rotation_holdings(daily: pd.DataFrame) -> dict[str, Any]:
-    if daily.empty:
+def etf_universe_payload() -> list[dict[str, str]]:
+    rows = []
+    for item in SECTOR_ETF_UNIVERSE:
+        if item.spec.code == "159915":
+            continue
+        rows.append(
+            {
+                "code": item.spec.code,
+                "name": item.spec.name,
+                "theme": item.theme,
+                "note": item.proxy_note,
+            }
+        )
+    return rows
+
+
+def rotation_holdings(daily: pd.DataFrame, as_of: str | date | None = None) -> dict[str, Any]:
+    sliced = daily_on_or_before(daily, as_of)
+    if sliced.empty:
         return {"as_of": None, "last_rebalance": None, "empty": True, "rows": []}
-    last = daily.iloc[-1]
+    last = sliced.iloc[-1]
     codes = [code for code in str(last.get("held") or "").split(",") if code]
-    traded = daily.copy()
+    traded = sliced.copy()
     if "traded" in traded.columns:
         traded = traded[pd.to_numeric(traded["traded"], errors="coerce").fillna(0).eq(1)]
     else:
@@ -444,6 +470,14 @@ def strategy_payload(
         }
         if "units" in daily.columns:
             item["units"] = float(row["units"])
+        if "held" in daily.columns:
+            item["held"] = str(row.get("held") or "")
+        if "n_held" in daily.columns:
+            item["n_held"] = int(row["n_held"]) if pd.notna(row["n_held"]) else 0
+        if "traded" in daily.columns:
+            item["traded"] = int(row["traded"]) if pd.notna(row["traded"]) else 0
+        if "action" in daily.columns:
+            item["action"] = str(row.get("action") or "")
         series.append(item)
     overlay_json = {}
     yearly = {}
@@ -587,7 +621,7 @@ def build_rotation_json(
             "有的只是近似：通信 ETF 不等于纯 CPO，人工智能 ETF 不等于纯液冷，"
             "军工 ETF 不等于纯商业航天，有色 ETF 不等于纯小金属。"
         ),
-        "怎么看": "这是对照观察，日常仍看创业板那一页。按年检验下来，多数年份只略好一点点。",
+        "怎么看": "这是对照观察，日常仍看创业板那一页。按年检验下来，多数年份只略好一点点。下面可以选日期，也可以点曲线，看那天拿着哪几只。",
         "费用": "每次换仓按单边千分之一计。",
         "窗口": f"{START.isoformat()} 到 {strategy_end.isoformat()}",
     }
@@ -611,6 +645,7 @@ def build_rotation_json(
             "hide_kline": True,
             "default_overlays": ["cyb-clock", "sh000001"],
             "page": "rotation",
+            "etf_universe": etf_universe_payload(),
         },
         risk_notes=[
             "有的 ETF 只是主题近似，不是纯板块。",
@@ -767,12 +802,13 @@ def build_site(
         "成交": "当天收盘确认，第二天开盘成交。",
         "费用": "单边千分之一。",
         "窗口": f"{START.isoformat()} 到 {strategy_end.isoformat()}",
+        "怎么看仓位": "下面可以选日期，也可以点净值曲线上的某一天，看那天收盘拿着什么。",
         "说明": DISCLAIMER_LONG,
     }
     committee_method = {
         "标的": "创业板 ETF（159915）",
         "怎么做": "五份仓一起看：进场都看 0AMV，离场线分别是情绪 50、55、60、65、70，最后取平均仓位。",
-        "怎么看": "只作观察，日常仍看满仓那一页。",
+        "怎么看": "只作观察，日常仍看满仓那一页。下面可以选日期，也可以点曲线，看那天仓位。",
         "费用": "单边千分之一。",
         "窗口": f"{START.isoformat()} 到 {strategy_end.isoformat()}",
         "说明": DISCLAIMER_LONG,
@@ -791,6 +827,14 @@ def build_site(
         methodology=clock_method,
         n_units=5,
         headline="日常跟仓看这一页",
+        extra={
+            "holdings_meta": {
+                "kind": "single",
+                "code": "159915",
+                "name": "创业板ETF",
+                "theme": "创业板",
+            }
+        },
     )
     committee_json = strategy_payload(
         key="cyb-committee",
@@ -806,6 +850,14 @@ def build_site(
         observation_only=True,
         n_units=5,
         headline="只作观察，日常仍看满仓那一页",
+        extra={
+            "holdings_meta": {
+                "kind": "single",
+                "code": "159915",
+                "name": "创业板ETF",
+                "theme": "创业板",
+            }
+        },
     )
 
     etf_ohlc = ohlc_records(
