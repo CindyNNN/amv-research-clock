@@ -184,7 +184,10 @@ def seed_cloud_amv_from_local(
     cloud_path: Path | str = CLOUD_AMV_PATH,
     local_path: Path | str = DEFAULT_AMV_PATH,
 ) -> Path:
-    """Create or refresh the public CSV from the local Compass export if needed."""
+    """Create or refresh the public CSV from the local Compass export if needed.
+
+    On the same date, Compass bars win over manual / GitHub-workflow fills.
+    """
     cloud = Path(cloud_path)
     local = Path(local_path)
     frames: list[pd.DataFrame] = []
@@ -195,5 +198,10 @@ def seed_cloud_amv_from_local(
     if not frames:
         raise AmvIndexDataError("既没有云端 0AMV，也没有本地 Compass 导出")
     merged = pd.concat(frames, ignore_index=True)
-    merged = merged.sort_values("date").drop_duplicates("date", keep="last")
+    merged["_rank"] = merged["source"].astype(str).str.contains("compass", case=False).astype(int)
+    merged = (
+        merged.sort_values(["date", "_rank"], kind="mergesort")
+        .drop_duplicates("date", keep="last")
+        .drop(columns="_rank")
+    )
     return write_cloud_amv(merged, cloud)

@@ -50,3 +50,40 @@ def test_parse_amv_issue_title_and_body():
     from_title = parse_amv_issue("0AMV 2026-08-13 210000")
     assert from_title["date"] == "2026-08-13"
     assert from_title["close"] == 210000.0
+
+
+def test_seed_cloud_prefers_compass_on_same_date(tmp_path: Path) -> None:
+    from ai_invest_advisor.amv_cloud import seed_cloud_amv_from_local, write_cloud_amv
+
+    cloud = tmp_path / "cloud.csv"
+    local = tmp_path / "local.csv"
+    write_cloud_amv(
+        pd.DataFrame(
+            {
+                "date": ["2026-08-13", "2026-08-14"],
+                "open": [207502.5, 207502.5],
+                "high": [207502.5, 207502.5],
+                "low": [207502.5, 207502.5],
+                "close": [207502.5, 207502.5],
+                "source": ["manual_user_input", "github_workflow"],
+            }
+        ),
+        cloud,
+    )
+    pd.DataFrame(
+        {
+            "date": ["2026-08-13", "2026-08-14"],
+            "open": [212962.3, 209709.8],
+            "high": [216633.7, 211843.0],
+            "low": [208493.2, 206864.2],
+            "close": [208572.3, 207502.5],
+            "volume": [1.0, 1.0],
+            "amount": [1.0, 1.0],
+        }
+    ).to_csv(local, index=False)
+    seed_cloud_amv_from_local(cloud_path=cloud, local_path=local)
+    out = pd.read_csv(cloud, parse_dates=["date"])
+    close_13 = float(out.loc[out["date"] == pd.Timestamp("2026-08-13"), "close"].iloc[0])
+    close_14 = float(out.loc[out["date"] == pd.Timestamp("2026-08-14"), "close"].iloc[0])
+    assert abs(close_13 - 208572.3) < 0.1
+    assert abs(close_14 - 207502.5) < 0.1
