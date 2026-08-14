@@ -3,7 +3,7 @@
   "data_product": "amv_research_index",
   "disclaimer": "研究辅助，不是投资建议。",
   "disclaimer_long": "这里的净值、仓位、图表只供自己复盘看，不是投资建议，也不保证以后还能这样。不会帮你下单，也不会要券商账号。",
-  "generated_at_utc": "2026-08-14T15:04:57Z",
+  "generated_at_utc": "2026-08-14T15:06:22Z",
   "index": {
     "key": "cyb-clock",
     "index_name_cn": "创业板满仓",
@@ -30,8 +30,8 @@
   "banners": [],
   "performance": {
     "latest_point": 3528.2949682013486,
-    "annualized_return": 0.20998687630554808,
-    "sharpe": 0.8869588564302416,
+    "annualized_return": 0.20998687630554805,
+    "sharpe": 0.8869588564302446,
     "exposure": 0.6182158452900811,
     "max_drawdown": {
       "value": -0.2723549473044756,
