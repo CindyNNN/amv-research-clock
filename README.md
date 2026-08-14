@@ -10,22 +10,11 @@
 - 每个交易日北京时间 **20:00**（12:00 UTC）由 GitHub Actions 重建；也可手动 Run workflow。
 - **0AMV 无法在云端计算**（指南针/通达信不能上 GitHub）。云端真相源是 `data/amv/0amv_daily.csv`。出门在外请用手机 App 跑 Actions 并粘贴今日收盘价。
 
-### 第一次放到网上
+公开地址：https://cindynnn.github.io/amv-research-clock/
 
-本机仓库目前需要你自己创建 GitHub 远程库并打开 Pages：
+仓库：https://github.com/CindyNNN/amv-research-clock
 
-```powershell
-cd "C:\Users\Cindy\Desktop\Finance\AI金融"
-git remote -v
-# 若还没有 origin：
-gh repo create amv-research-clock --source=. --public --remote=origin --push
-```
-
-然后：
-
-1. 仓库 **Settings → Pages → Build and deployment → Source** 选 **GitHub Actions**
-2. 打开 **Actions** 跑一次 **Build strategy site**（可先不填 0AMV）
-3. 地址形如 `https://CindyNNN.github.io/amv-research-clock/`
+Pages 已设为 GitHub Actions 构建。每个交易日北京时间 20:00 自动更新；也可在 Actions 里手动 Run workflow。
 
 ### 本地预览
 

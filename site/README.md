@@ -6,11 +6,9 @@
 
 ## Pages 地址
 
-发布后替换为实际地址：
+https://cindynnn.github.io/amv-research-clock/
 
-`https://<user>.github.io/<repo>/`
-
-仓库 Settings → Pages → Source 选 **GitHub Actions**。
+仓库：https://github.com/CindyNNN/amv-research-clock
 
 ## 本地预览
 
