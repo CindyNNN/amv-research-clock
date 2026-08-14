@@ -344,9 +344,14 @@
       $("amv-date").value = beijingDateISO();
       $("amv-close").value = "";
       const fresh = (state.catalog && state.catalog.freshness) || {};
+      const lastClose = fresh.amv_trusted_close;
       $("amv-hint").textContent = fresh.amv_trusted_as_of
-        ? `上一有效日 ${fresh.amv_trusted_as_of}。需登录仓库所有者 GitHub 账号。`
-        : "需登录仓库所有者 GitHub 账号后提交。";
+        ? `上一有效日 ${fresh.amv_trusted_as_of}` +
+          (lastClose != null ? `，收盘 ${Number(lastClose).toLocaleString("zh-CN")}` : "") +
+          "。提交后还要在 GitHub 再点一次 Create issue。"
+        : "提交后还要在 GitHub 再点一次 Create issue。";
+      $("amv-status").hidden = true;
+      $("amv-github-link").hidden = true;
       dialog.showModal();
       $("amv-close").focus();
     });
@@ -356,20 +361,35 @@
       const date = $("amv-date").value;
       const close = Number($("amv-close").value);
       if (!date || !(close > 0)) return;
+      const fresh = (state.catalog && state.catalog.freshness) || {};
+      const lastClose = Number(fresh.amv_trusted_close);
+      if (lastClose > 0 && Math.abs(close - lastClose) < 1e-6) {
+        const ok = window.confirm(
+          `这个收盘价和上一有效日 ${fresh.amv_trusted_as_of} 完全相同。\n` +
+            "系统会写入，但不当新信号，仓位和净值都不会变。\n仍要提交吗？"
+        );
+        if (!ok) return;
+      }
       const repo = (state.catalog && state.catalog.github_repo) || "CindyNNN/amv-research-clock";
       const title = `0AMV ${date}`;
       const body = [
         `date: ${date}`,
         `close: ${close}`,
         "",
-        "请用仓库所有者账号直接提交，不要改格式。提交后 GitHub Actions 会重建站点。",
+        "请用仓库所有者账号直接点 Create issue，不要改格式。",
         "研究辅助，不是投资建议。",
       ].join("\n");
       const url =
         `https://github.com/${repo}/issues/new?title=${encodeURIComponent(title)}` +
         `&body=${encodeURIComponent(body)}`;
-      window.open(url, "_blank", "noopener");
-      dialog.close();
+      const link = $("amv-github-link");
+      link.href = url;
+      link.hidden = false;
+      const popup = window.open(url, "_blank", "noopener");
+      $("amv-status").hidden = false;
+      $("amv-status").textContent = popup
+        ? "已打开 GitHub。请在新标签页点绿色 Create issue，约 1–2 分钟后回来刷新本页。"
+        : "弹窗被拦截。请点下面「弹窗被拦截时点这里」，再在 GitHub 点 Create issue。";
     });
   }
 

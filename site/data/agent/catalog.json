@@ -21,6 +21,8 @@
   "freshness": {
     "amv_as_of": "2026-08-14",
     "amv_trusted_as_of": "2026-08-13",
+    "amv_last_close": 207502.5,
+    "amv_trusted_close": 207502.5,
     "emotion_as_of": "2026-08-14",
     "overlay_as_of": "2026-08-14",
     "strategy_end": "2026-08-13",

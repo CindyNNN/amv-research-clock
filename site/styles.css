@@ -236,9 +236,5 @@ code { color: var(--gold); }
   background: var(--bg);
   color: var(--text);
 }
-.dialog-actions .primary {
-  background: var(--gold);
-  color: var(--bg);
-  border-color: var(--gold);
-  font-weight: 650;
-}
+.amv-dialog .warn { color: #fcd34d; font-size: 13px; margin: 0; }
+.amv-dialog a { color: var(--gold); }

@@ -23,6 +23,7 @@ from ai_invest_advisor.amv_cloud import (
     load_cloud_amv,
     pages_url,
     seed_cloud_amv_from_local,
+    trusted_amv_frame,
     trusted_amv_last,
 )
 from ai_invest_advisor.amv_index_backtest import buy_and_hold_equity, run_index_backtest, summarize_backtest
@@ -77,6 +78,8 @@ class BuildStatus:
     banners: list[str]
     amv_as_of: str
     amv_trusted_as_of: str
+    amv_last_close: float
+    amv_trusted_close: float
     emotion_as_of: str | None
     overlay_as_of: str | None
     amv_stale: bool
@@ -409,6 +412,8 @@ def strategy_payload(
         "freshness": {
             "amv_as_of": status.amv_as_of,
             "amv_trusted_as_of": status.amv_trusted_as_of,
+            "amv_last_close": status.amv_last_close,
+            "amv_trusted_close": status.amv_trusted_close,
             "emotion_as_of": status.emotion_as_of,
             "overlay_as_of": status.overlay_as_of,
             "amv_stale": status.amv_stale,
@@ -474,8 +479,11 @@ def build_site(
             + ("（与上一有效日收盘相同，不作为新信号）" if result["duplicate_close"] else "")
         )
     amv = load_cloud_amv()
+    trusted = trusted_amv_frame(amv)
     amv_last = pd.Timestamp(amv["date"].iloc[-1]).date()
-    trusted_end = trusted_amv_last(amv)
+    trusted_end = pd.Timestamp(trusted["date"].iloc[-1]).date()
+    amv_last_close = float(amv["close"].iloc[-1])
+    amv_trusted_close = float(trusted["close"].iloc[-1])
     dupes = duplicate_tail_dates(amv)
     if dupes:
         banners.append(
@@ -519,6 +527,8 @@ def build_site(
         banners=banners,
         amv_as_of=amv_last.isoformat(),
         amv_trusted_as_of=trusted_end.isoformat(),
+        amv_last_close=amv_last_close,
+        amv_trusted_close=amv_trusted_close,
         emotion_as_of=emotion_last.isoformat(),
         overlay_as_of=overlay_as_of.isoformat() if overlay_as_of else None,
         amv_stale=amv_stale,
@@ -646,6 +656,8 @@ def build_site(
         "freshness": {
             "amv_as_of": status.amv_as_of,
             "amv_trusted_as_of": status.amv_trusted_as_of,
+            "amv_last_close": status.amv_last_close,
+            "amv_trusted_close": status.amv_trusted_close,
             "emotion_as_of": status.emotion_as_of,
             "overlay_as_of": status.overlay_as_of,
             "strategy_end": strategy_end.isoformat(),

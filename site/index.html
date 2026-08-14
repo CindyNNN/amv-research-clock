@@ -96,20 +96,22 @@
   <dialog id="amv-dialog" class="amv-dialog">
     <form id="amv-form" method="dialog">
       <h2>录入指南针 0AMV</h2>
-      <p class="muted">填收盘价后会打开 GitHub。请用仓库所有者账号点 Submit，Actions 会写入并更新网页。研究辅助，不是投资建议。</p>
+      <p class="muted">提交后会打开 GitHub，还需要再点一次绿色 <strong>Create issue</strong> 才会写入。若填的收盘价和上一有效日相同，仓位不会变。</p>
       <label>
         日期
         <input id="amv-date" name="date" type="date" required />
       </label>
       <label>
         收盘价
-        <input id="amv-close" name="close" type="number" inputmode="decimal" step="0.01" min="0.01" required placeholder="例如 207502.5" />
+        <input id="amv-close" name="close" type="number" inputmode="decimal" step="0.01" min="0.01" required placeholder="例如 210962" />
       </label>
       <p class="muted" id="amv-hint"></p>
+      <p class="warn" id="amv-status" hidden></p>
       <div class="dialog-actions">
         <button type="button" id="amv-cancel">取消</button>
-        <button type="submit" class="primary">提交并更新站点</button>
+        <button type="submit" class="primary">打开 GitHub 提交</button>
       </div>
+      <a id="amv-github-link" class="muted" hidden target="_blank" rel="noopener">弹窗被拦截时点这里</a>
     </form>
   </dialog>
   <script src="app.js"></script>
