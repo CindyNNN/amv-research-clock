@@ -3,7 +3,7 @@
   "data_product": "amv_research_index",
   "disclaimer": "研究辅助，不是投资建议。",
   "disclaimer_long": "本站所有净值、仓位、超额与图表仅供研究观察，不构成投资建议、收益承诺或交易指令。不代客下单，不索取券商账号。",
-  "generated_at_utc": "2026-08-14T14:23:18Z",
+  "generated_at_utc": "2026-08-14T14:23:49Z",
   "index": {
     "key": "cyb-committee",
     "index_name_cn": "五份离场委员会",
@@ -27,12 +27,12 @@
     "expected_update": "每个交易日北京时间 20:00 左右（GitHub Actions 12:00 UTC）"
   },
   "banners": [
-    "情绪数据已尝试用同花顺涨跌分布刷新。"
+    "同花顺情绪刷新失败，沿用仓库内 combined CSV：无法加载指南针0AMV日线（/home/runner/work/amv-research-clock/amv-research-clock/data/compass/0amv_daily.csv）：找不到 0AMV 日线: /home/runner/work/amv-research-clock/amv-research-clock/data/compass/0amv_daily.csv"
   ],
   "performance": {
     "latest_point": 3813.9251717242005,
     "annualized_return": 0.22431066485162426,
-    "sharpe": 0.9603835170790019,
+    "sharpe": 0.960383517079001,
     "exposure": 0.5624454148471616,
     "max_drawdown": {
       "value": -0.2550410754294249,
