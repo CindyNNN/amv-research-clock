@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "data_product": "amv_research_catalog",
-  "generated_at_utc": "2026-08-14T13:41:54Z",
+  "generated_at_utc": "2026-08-14T13:46:15Z",
   "language": [
     "zh-CN"
   ],
@@ -14,7 +14,6 @@
   "amv_phone_workflow": "点页面右上角「录入 0AMV」，填收盘价后用仓库所有者 GitHub 账号提交 Issue；Actions 会写入并更新网页。",
   "banners": [
     "今日 0AMV 未更新，信号沿用上一有效日 2026-08-13。指数/ETF 对比层仍刷新到各自最新日期。",
-    "已写入 0AMV 2026-08-14 close=207502.50（与上一有效日收盘相同，不作为新信号）",
     "2026-08-14 的 0AMV 收盘与前一日相同，不作为有效信号；策略序列截至 2026-08-13。",
     "同花顺情绪刷新失败，沿用仓库内 combined CSV：无法加载指南针0AMV日线（/home/runner/work/amv-research-clock/amv-research-clock/data/compass/0amv_daily.csv）：找不到 0AMV 日线: /home/runner/work/amv-research-clock/amv-research-clock/data/compass/0amv_daily.csv"
   ],
