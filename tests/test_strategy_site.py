@@ -39,3 +39,14 @@ def test_yearly_excess_ratio_method() -> None:
     assert abs(rows[2021]["index_return"] - 0.10) < 1e-9
     assert abs(rows[2021]["benchmark_return"] - -0.20) < 1e-9
     assert abs(rows[2021]["excess"] - ((1.10 / 0.80) - 1.0)) < 1e-9
+
+
+def test_parse_amv_issue_title_and_body():
+    from ai_invest_advisor.amv_cloud import parse_amv_issue
+
+    parsed = parse_amv_issue("0AMV 2026-08-14", "close: 207502.5\ndate: 2026-08-14\n")
+    assert parsed["date"] == "2026-08-14"
+    assert parsed["close"] == 207502.5
+    from_title = parse_amv_issue("0AMV 2026-08-13 210000")
+    assert from_title["date"] == "2026-08-13"
+    assert from_title["close"] == 210000.0

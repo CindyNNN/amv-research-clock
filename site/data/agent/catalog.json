@@ -8,9 +8,10 @@
   "disclaimer": "研究辅助，不是投资建议。",
   "disclaimer_long": "本站所有净值、仓位、超额与图表仅供研究观察，不构成投资建议、收益承诺或交易指令。不代客下单，不索取券商账号。",
   "site_name": "创业板 0AMV 研究时钟",
-  "pages_url_placeholder": "https://<user>.github.io/<repo>/",
+  "github_repo": "CindyNNN/amv-research-clock",
+  "pages_url": "https://cindynnn.github.io/amv-research-clock/",
   "expected_update": "每个交易日北京时间 20:00 左右",
-  "amv_phone_workflow": "手机打开 GitHub App → Actions → Build strategy site → Run workflow，在 amv_close 填入今日 0AMV 收盘价，可选 amv_date。",
+  "amv_phone_workflow": "点页面右上角「录入 0AMV」，填收盘价后用仓库所有者 GitHub 账号提交 Issue；Actions 会写入并更新网页。",
   "banners": [
     "今日 0AMV 未更新，信号沿用上一有效日 2026-08-13。指数/ETF 对比层仍刷新到各自最新日期。",
     "2026-08-14 的 0AMV 收盘与前一日相同，不作为有效信号；策略序列截至 2026-08-13。",

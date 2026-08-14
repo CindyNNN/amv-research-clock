@@ -7,6 +7,8 @@ equals the previous close is stored but not treated as a live AMV signal.
 
 from __future__ import annotations
 
+import os
+import re
 from datetime import date, datetime, timezone, timedelta
 from pathlib import Path
 from typing import Any
@@ -19,6 +21,49 @@ ROOT = Path(__file__).resolve().parents[2]
 CLOUD_AMV_PATH = ROOT / "data" / "amv" / "0amv_daily.csv"
 CLOUD_COLUMNS = ("date", "open", "high", "low", "close", "source")
 CST = timezone(timedelta(hours=8))
+DEFAULT_GITHUB_REPO = "CindyNNN/amv-research-clock"
+_AMV_TITLE = re.compile(
+    r"^0AMV(?:\s+(\d{4}-\d{2}-\d{2}))?(?:\s+([0-9]+(?:\.[0-9]+)?))?\s*$",
+    re.IGNORECASE,
+)
+_CLOSE_LINE = re.compile(r"(?im)^\s*close\s*[:=]\s*([0-9]+(?:\.[0-9]+)?)\s*$")
+_DATE_LINE = re.compile(r"(?im)^\s*date\s*[:=]\s*(\d{4}-\d{2}-\d{2})\s*$")
+
+
+def github_repo() -> str:
+    return os.environ.get("GITHUB_REPOSITORY", DEFAULT_GITHUB_REPO).strip() or DEFAULT_GITHUB_REPO
+
+
+def pages_url(repo: str | None = None) -> str:
+    owner, _, name = (repo or github_repo()).partition("/")
+    if not owner or not name:
+        return "https://cindynnn.github.io/amv-research-clock/"
+    return f"https://{owner.lower()}.github.io/{name}/"
+
+
+def parse_amv_issue(title: str, body: str | None = None) -> dict[str, Any]:
+    """Parse a site-submitted GitHub issue into date + close."""
+    title = (title or "").strip()
+    body = body or ""
+    matched = _AMV_TITLE.match(title)
+    if not matched:
+        raise AmvIndexDataError("Issue 标题需为：0AMV YYYY-MM-DD")
+    date_s = matched.group(1)
+    close_s = matched.group(2)
+    date_line = _DATE_LINE.search(body)
+    close_line = _CLOSE_LINE.search(body)
+    if date_line:
+        date_s = date_line.group(1)
+    if close_line:
+        close_s = close_line.group(1)
+    if not date_s:
+        date_s = beijing_today().isoformat()
+    if not close_s:
+        raise AmvIndexDataError("缺少 0AMV 收盘价 close")
+    close = float(close_s)
+    if close <= 0:
+        raise AmvIndexDataError("0AMV close 必须为正数")
+    return {"date": date_s, "close": close}
 
 
 def beijing_today() -> date:

@@ -19,7 +19,9 @@ from ai_invest_advisor.amv_cloud import (
     append_amv_close,
     beijing_today,
     duplicate_tail_dates,
+    github_repo,
     load_cloud_amv,
+    pages_url,
     seed_cloud_amv_from_local,
     trusted_amv_last,
 )
@@ -633,11 +635,12 @@ def build_site(
         "disclaimer": DISCLAIMER,
         "disclaimer_long": DISCLAIMER_LONG,
         "site_name": "创业板 0AMV 研究时钟",
-        "pages_url_placeholder": "https://<user>.github.io/<repo>/",
+        "github_repo": github_repo(),
+        "pages_url": pages_url(),
         "expected_update": "每个交易日北京时间 20:00 左右",
         "amv_phone_workflow": (
-            "手机打开 GitHub App → Actions → Build strategy site → Run workflow，"
-            "在 amv_close 填入今日 0AMV 收盘价，可选 amv_date。"
+            "点页面右上角「录入 0AMV」，填收盘价后用仓库所有者 GitHub 账号提交 Issue；"
+            "Actions 会写入并更新网页。"
         ),
         "banners": banners,
         "freshness": {

@@ -22,17 +22,11 @@ python -m http.server 8080 --directory site
 
 浏览器打开 http://127.0.0.1:8080/ 。不要用 `file://`，否则 JSON 无法加载。
 
-## 手机补录 0AMV（电脑不在身边）
+## 页面录入 0AMV
 
-指南针/通达信不能在 GitHub 上跑。云端真相源是仓库里的 `data/amv/0amv_daily.csv`。
+打开站点，点右上角 **录入 0AMV**，填指南针收盘价。用仓库所有者 GitHub 账号提交 Issue 后，Actions 会写入并更新网页。
 
-1. 打开 GitHub 手机 App → 本仓库 → **Actions**
-2. 选 **Build strategy site** → **Run workflow**
-3. 在 `amv_close` 粘贴今日 0AMV **收盘价**
-4. 如需指定日期，填 `amv_date`（`YYYY-MM-DD`）；不填则用北京今天
-5. 跑完后 Pages 会更新；若未填收盘价，指数/ETF 对比层仍会刷新，页面横幅写「今日 0AMV 未更新，信号沿用上一有效日」
-
-收盘价若与上一有效日完全相同（例如 2026-08-14 曾误录成与 08-13 相同的 207502.5），不会当作新的 AMV 信号。
+收盘价若与上一有效日完全相同，不作为新的 AMV 信号。
 
 ## 定时任务
 

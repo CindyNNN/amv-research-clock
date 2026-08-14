@@ -16,6 +16,7 @@
       <p class="tagline">用可复盘规则跟踪创业板择时观察序列 · 每个交易日北京时间约 20:00 更新</p>
     </div>
     <div class="header-meta">
+      <button type="button" class="amv-btn" id="amv-open">录入 0AMV</button>
       <div class="clock" id="bj-clock">北京时间 --:--:--</div>
       <div class="asof" id="asof-chip">数据日 --</div>
     </div>
@@ -87,10 +88,30 @@
   </main>
 
   <footer>
-    <p>手机补录 0AMV：GitHub App → Actions → <strong>Build strategy site</strong> → Run workflow → 填写 <code>amv_close</code>。</p>
-    <p>指南针/通达信无法在 GitHub 运行；未粘贴新收盘时，站点仍刷新指数对比层，信号沿用上一有效日。</p>
+    <p>指南针 0AMV：点右上角 <strong>录入 0AMV</strong>，填收盘价后用仓库所有者 GitHub 账号提交。约 1–2 分钟后刷新本页。</p>
+    <p>指南针/通达信无法在 GitHub 运行；未提交新收盘时，站点仍刷新指数对比层，信号沿用上一有效日。</p>
     <p>研究辅助，不是投资建议。</p>
   </footer>
+
+  <dialog id="amv-dialog" class="amv-dialog">
+    <form id="amv-form" method="dialog">
+      <h2>录入指南针 0AMV</h2>
+      <p class="muted">填收盘价后会打开 GitHub。请用仓库所有者账号点 Submit，Actions 会写入并更新网页。研究辅助，不是投资建议。</p>
+      <label>
+        日期
+        <input id="amv-date" name="date" type="date" required />
+      </label>
+      <label>
+        收盘价
+        <input id="amv-close" name="close" type="number" inputmode="decimal" step="0.01" min="0.01" required placeholder="例如 207502.5" />
+      </label>
+      <p class="muted" id="amv-hint"></p>
+      <div class="dialog-actions">
+        <button type="button" id="amv-cancel">取消</button>
+        <button type="submit" class="primary">提交并更新站点</button>
+      </div>
+    </form>
+  </dialog>
   <script src="app.js"></script>
 </body>
 </html>

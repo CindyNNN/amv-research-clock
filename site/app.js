@@ -197,8 +197,18 @@
     const chart = LightweightCharts.createChart(el, {
       layout: { background: { color: "#16161d" }, textColor: "#a1a1aa" },
       grid: { vertLines: { color: "#2a2a33" }, horzLines: { color: "#2a2a33" } },
-      rightPriceScale: { borderColor: "#2a2a33" },
-      timeScale: { borderColor: "#2a2a33" },
+      rightPriceScale: {
+        borderColor: "#2a2a33",
+        autoScale: true,
+        scaleMargins: { top: 0.06, bottom: 0.06 },
+      },
+      timeScale: {
+        borderColor: "#2a2a33",
+        minBarSpacing: 0.05,
+        rightOffset: 2,
+        fixLeftEdge: state.period === "all",
+        fixRightEdge: state.period === "all",
+      },
       autoSize: true,
     });
     state.chart = chart;
@@ -220,6 +230,7 @@
       });
       cs.setData(candles);
       $("legend").textContent = "K线为创业板 ETF 159915 前复权，红涨绿跌。仅用于观察，不构成交易指令。";
+      fitChart();
       return;
     }
     const sliced = filterByPeriod(page.series);
@@ -242,6 +253,14 @@
       names.push(ov.name);
     });
     $("legend").textContent = "净值在当前窗口起点归一为 1000。对比层：" + names.join(" / ");
+    fitChart();
+  }
+
+  function fitChart() {
+    if (!state.chart) return;
+    requestAnimationFrame(() => {
+      if (state.chart) state.chart.timeScale().fitContent();
+    });
   }
 
   function renderYearTable(page) {
@@ -313,8 +332,52 @@
     renderYearTable(state.page);
   });
 
+  function beijingDateISO() {
+    return new Date().toLocaleDateString("en-CA", { timeZone: "Asia/Shanghai" });
+  }
+
+  function bindAmvDialog() {
+    const dialog = $("amv-dialog");
+    const form = $("amv-form");
+    if (!dialog || !form) return;
+    $("amv-open").addEventListener("click", () => {
+      $("amv-date").value = beijingDateISO();
+      $("amv-close").value = "";
+      const fresh = (state.catalog && state.catalog.freshness) || {};
+      $("amv-hint").textContent = fresh.amv_trusted_as_of
+        ? `上一有效日 ${fresh.amv_trusted_as_of}。需登录仓库所有者 GitHub 账号。`
+        : "需登录仓库所有者 GitHub 账号后提交。";
+      dialog.showModal();
+      $("amv-close").focus();
+    });
+    $("amv-cancel").addEventListener("click", () => dialog.close());
+    form.addEventListener("submit", (event) => {
+      event.preventDefault();
+      const date = $("amv-date").value;
+      const close = Number($("amv-close").value);
+      if (!date || !(close > 0)) return;
+      const repo = (state.catalog && state.catalog.github_repo) || "CindyNNN/amv-research-clock";
+      const title = `0AMV ${date}`;
+      const body = [
+        `date: ${date}`,
+        `close: ${close}`,
+        "",
+        "请用仓库所有者账号直接提交，不要改格式。提交后 GitHub Actions 会重建站点。",
+        "研究辅助，不是投资建议。",
+      ].join("\n");
+      const url =
+        `https://github.com/${repo}/issues/new?title=${encodeURIComponent(title)}` +
+        `&body=${encodeURIComponent(body)}`;
+      window.open(url, "_blank", "noopener");
+      dialog.close();
+    });
+  }
+
+  window.addEventListener("resize", fitChart);
+
   tickClock();
   setInterval(tickClock, 1000);
+  bindAmvDialog();
 
   loadJson("data/agent/catalog.json")
     .then((catalog) => {

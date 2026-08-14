@@ -34,9 +34,19 @@ body { min-height: 100vh; }
 }
 h1 { margin: 6px 0 8px; font-size: 28px; font-weight: 650; }
 .tagline { margin: 0; color: var(--muted); font-size: 14px; max-width: 520px; }
-.header-meta { text-align: right; }
+.header-meta { text-align: right; display: flex; flex-direction: column; align-items: flex-end; gap: 8px; }
+.amv-btn {
+  background: var(--gold);
+  color: var(--bg);
+  border: 0;
+  border-radius: 999px;
+  padding: 8px 16px;
+  font-weight: 650;
+  cursor: pointer;
+}
+.amv-btn:hover { filter: brightness(1.05); }
 .clock { font-variant-numeric: tabular-nums; color: var(--gold); font-size: 18px; }
-.asof { color: var(--muted); font-size: 13px; margin-top: 6px; }
+.asof { color: var(--muted); font-size: 13px; }
 
 .disclaimer-bar {
   max-width: 1180px;
@@ -159,7 +169,7 @@ main { max-width: 1180px; margin: 0 auto; padding: 18px 28px 64px; }
   font-size: 13px;
 }
 .overlays label { cursor: pointer; display: flex; gap: 6px; align-items: center; }
-.chart { height: 420px; }
+.chart { height: 520px; }
 .legend { color: var(--muted); font-size: 12px; margin-top: 8px; }
 
 h2 { font-size: 16px; margin: 0 0 8px; }
@@ -194,5 +204,41 @@ code { color: var(--gold); }
   .header-meta, .hero-point, .hero { text-align: left; }
   .hero { flex-direction: column; align-items: flex-start; }
   .point { font-size: 32px; }
-  .chart { height: 300px; }
+  .chart { height: 380px; }
+}
+
+.amv-dialog {
+  width: min(420px, calc(100vw - 32px));
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: var(--card);
+  color: var(--text);
+  padding: 20px;
+}
+.amv-dialog::backdrop { background: rgba(0, 0, 0, 0.55); }
+.amv-dialog h2 { margin: 0 0 8px; }
+.amv-dialog form { display: flex; flex-direction: column; gap: 12px; }
+.amv-dialog label { display: flex; flex-direction: column; gap: 6px; font-size: 13px; color: var(--muted); }
+.amv-dialog input {
+  background: var(--bg);
+  color: var(--text);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 10px 12px;
+  font-size: 16px;
+}
+.dialog-actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 4px; }
+.dialog-actions button {
+  border-radius: 8px;
+  padding: 8px 14px;
+  cursor: pointer;
+  border: 1px solid var(--line);
+  background: var(--bg);
+  color: var(--text);
+}
+.dialog-actions .primary {
+  background: var(--gold);
+  color: var(--bg);
+  border-color: var(--gold);
+  font-weight: 650;
 }

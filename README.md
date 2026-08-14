@@ -8,7 +8,7 @@
 
 - 页面：创业板 **0AMV 满仓时钟**（`amv_emo70_ma60`，159915）以及 **五份离场委员会**（情绪离场 50/55/60/65/70 等权，观察用）。
 - 每个交易日北京时间 **20:00**（12:00 UTC）由 GitHub Actions 重建；也可手动 Run workflow。
-- **0AMV 无法在云端计算**（指南针/通达信不能上 GitHub）。云端真相源是 `data/amv/0amv_daily.csv`。出门在外请用手机 App 跑 Actions 并粘贴今日收盘价。
+- 点页面右上角 **录入 0AMV**，填收盘价；用仓库所有者 GitHub 账号提交后，Actions 会写入并更新网页。
 
 公开地址：https://cindynnn.github.io/amv-research-clock/
 
@@ -26,14 +26,14 @@ python -m http.server 8080 --directory site
 
 打开 http://127.0.0.1:8080/
 
-### 手机补录 0AMV
+## 页面录入 0AMV
 
-1. GitHub App → 本仓库 → **Actions** → **Build strategy site** → **Run workflow**
-2. `amv_close`：今日 0AMV 收盘价
-3. `amv_date`：可选，`YYYY-MM-DD`；不填即北京今天
-4. 不填收盘价时仍会刷新上证/深成/创业板指/沪深300/159915 对比层，横幅提示信号沿用上一有效日
+1. 打开站点，点右上角 **录入 0AMV**
+2. 填日期和指南针收盘价
+3. 用仓库所有者 GitHub 账号提交 Issue
+4. 约 1–2 分钟后刷新网页
 
-若某日收盘价与上一有效日完全相同，不作为新的 AMV 信号。
+收盘价若与上一有效日完全相同，不作为新的 AMV 信号。
 
 ## 本地技术看板
 
