@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "data_product": "amv_research_catalog",
-  "generated_at_utc": "2026-08-14T15:06:22Z",
+  "generated_at_utc": "2026-08-17T09:12:01Z",
   "language": [
     "zh-CN"
   ],
@@ -13,18 +13,20 @@
   "expected_update": "每个交易日晚上八点左右",
   "amv_phone_workflow": "在创业板这一页点右上角「录入 0AMV」，填收盘价后用仓库所有者的 GitHub 账号提交；大约一两分钟后刷新网页就能看到。",
   "banners": [
-    "市场情绪今天没刷上，仍用仓库里上一份。原因：无法加载指南针0AMV日线（/home/runner/work/amv-research-clock/amv-research-clock/data/compass/0amv_daily.csv）：找不到 0AMV 日线: /home/runner/work/amv-research-clock/amv-research-clock/data/compass/0amv_daily.csv"
+    "已记下 0AMV 2026-08-17 收盘 212275.30",
+    "市场情绪今天没刷上，仍用仓库里上一份。原因：无法加载指南针0AMV日线（/home/runner/work/amv-research-clock/amv-research-clock/data/compass/0amv_daily.csv）：找不到 0AMV 日线: /home/runner/work/amv-research-clock/amv-research-clock/data/compass/0amv_daily.csv",
+    "市场情绪数据停在 2026-08-14，可能比行情慢一拍。"
   ],
   "freshness": {
-    "amv_as_of": "2026-08-14",
-    "amv_trusted_as_of": "2026-08-14",
-    "amv_last_close": 207502.5,
-    "amv_trusted_close": 207502.5,
+    "amv_as_of": "2026-08-17",
+    "amv_trusted_as_of": "2026-08-17",
+    "amv_last_close": 212275.3,
+    "amv_trusted_close": 212275.3,
     "emotion_as_of": "2026-08-14",
-    "overlay_as_of": "2026-08-14",
+    "overlay_as_of": "2026-08-17",
     "strategy_end": "2026-08-14",
     "amv_stale": false,
-    "emotion_stale": false
+    "emotion_stale": true
   },
   "pages": [
     {
