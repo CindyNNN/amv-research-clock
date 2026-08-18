@@ -1,37 +1,37 @@
 {
   "schema_version": 1,
-  "generated_at_utc": "2026-08-17T12:16:33Z",
+  "generated_at_utc": "2026-08-18T12:18:28Z",
   "disclaimer": "研究辅助，不是投资建议。",
-  "as_of": "2026-08-14",
+  "as_of": "2026-08-17",
   "indices": [
     {
       "key": "cyb-clock",
       "name": "创业板满仓",
       "latest_point": 3528.2949682013486,
-      "annualized_return": 0.20998687630554805,
+      "annualized_return": 0.20970088074699225,
       "max_drawdown": -0.2723549473044756,
-      "sharpe": 0.8869588564302446,
-      "exposure": 0.6182158452900811,
+      "sharpe": 0.8866814661695793,
+      "exposure": 0.6178304239401496,
       "position": "空仓"
     },
     {
       "key": "cyb-committee",
       "name": "五份仓观察",
       "latest_point": 3813.9251717242005,
-      "annualized_return": 0.22431066485162426,
+      "annualized_return": 0.22400341920387146,
       "max_drawdown": -0.2550410754294249,
-      "sharpe": 0.960383517079001,
-      "exposure": 0.5624454148471616,
+      "sharpe": 0.960083002473631,
+      "exposure": 0.5620947630922694,
       "position": "空仓"
     },
     {
       "key": "sector-rotation",
       "name": "板块轮动对照",
       "latest_point": 4455.196977371482,
-      "annualized_return": 0.2534166607099561,
+      "annualized_return": 0.25306559805451384,
       "max_drawdown": -0.24941257141255124,
-      "sharpe": 0.9859317941386276,
-      "exposure": 0.5720524017467249,
+      "sharpe": 0.9856232244948634,
+      "exposure": 0.5716957605985037,
       "position": "空仓"
     }
   ]
