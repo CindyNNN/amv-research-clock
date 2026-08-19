@@ -3,7 +3,7 @@
   "data_product": "amv_research_index",
   "disclaimer": "研究辅助，不是投资建议。",
   "disclaimer_long": "这里的净值、仓位、图表只供自己复盘看，不是投资建议，也不保证以后还能这样。不会帮你下单，也不会要券商账号。",
-  "generated_at_utc": "2026-08-18T12:18:28Z",
+  "generated_at_utc": "2026-08-19T12:18:32Z",
   "index": {
     "key": "cyb-committee",
     "index_name_cn": "五份仓观察",
@@ -21,8 +21,8 @@
     "amv_trusted_as_of": "2026-08-17",
     "amv_last_close": 212275.3,
     "amv_trusted_close": 212275.3,
-    "emotion_as_of": "2026-08-17",
-    "overlay_as_of": "2026-08-18",
+    "emotion_as_of": "2026-08-18",
+    "overlay_as_of": "2026-08-19",
     "amv_stale": true,
     "emotion_stale": true,
     "expected_update": "每个交易日晚上八点左右更新"
