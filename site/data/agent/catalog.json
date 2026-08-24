@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "data_product": "amv_research_catalog",
-  "generated_at_utc": "2026-08-21T12:20:05Z",
+  "generated_at_utc": "2026-08-24T12:20:24Z",
   "language": [
     "zh-CN"
   ],
@@ -15,15 +15,15 @@
   "banners": [
     "今天的 0AMV 还没更新，信号仍按上一有效日 2026-08-17。上证、深成这些对比线会继续刷到最新。",
     "市场情绪今天没刷上，仍用仓库里上一份。原因：无法加载指南针0AMV日线（/home/runner/work/amv-research-clock/amv-research-clock/data/compass/0amv_daily.csv）：找不到 0AMV 日线: /home/runner/work/amv-research-clock/amv-research-clock/data/compass/0amv_daily.csv",
-    "市场情绪数据停在 2026-08-20，可能比行情慢一拍。"
+    "市场情绪数据停在 2026-08-21，可能比行情慢一拍。"
   ],
   "freshness": {
     "amv_as_of": "2026-08-17",
     "amv_trusted_as_of": "2026-08-17",
     "amv_last_close": 212275.3,
     "amv_trusted_close": 212275.3,
-    "emotion_as_of": "2026-08-20",
-    "overlay_as_of": "2026-08-21",
+    "emotion_as_of": "2026-08-21",
+    "overlay_as_of": "2026-08-24",
     "strategy_end": "2026-08-17",
     "amv_stale": true,
     "emotion_stale": true
