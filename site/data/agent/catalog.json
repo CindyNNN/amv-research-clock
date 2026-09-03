@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "data_product": "amv_research_catalog",
-  "generated_at_utc": "2026-09-02T15:25:42Z",
+  "generated_at_utc": "2026-09-03T15:19:18Z",
   "language": [
     "zh-CN"
   ],
@@ -21,8 +21,8 @@
     "amv_trusted_as_of": "2026-08-17",
     "amv_last_close": 212275.3,
     "amv_trusted_close": 212275.3,
-    "emotion_as_of": "2026-09-02",
-    "overlay_as_of": "2026-09-02",
+    "emotion_as_of": "2026-09-03",
+    "overlay_as_of": "2026-09-03",
     "strategy_end": "2026-08-17",
     "amv_stale": true,
     "emotion_stale": false
