@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at_utc": "2026-09-08T15:27:23Z",
+  "generated_at_utc": "2026-09-09T15:24:11Z",
   "disclaimer": "研究辅助，不是投资建议。",
   "as_of": "2026-08-17",
   "indices": [
@@ -27,10 +27,10 @@
     {
       "key": "sector-rotation",
       "name": "板块轮动对照",
-      "latest_point": 4455.196977371482,
-      "annualized_return": 0.25306559805451384,
-      "max_drawdown": -0.24941257141255124,
-      "sharpe": 0.9856232244948634,
+      "latest_point": 4707.44192890699,
+      "annualized_return": 0.26352909356787857,
+      "max_drawdown": -0.25063569704295785,
+      "sharpe": 1.00654071932175,
       "exposure": 0.5716957605985037,
       "position": "空仓"
     }
