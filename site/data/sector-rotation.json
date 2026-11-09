@@ -3,7 +3,7 @@
   "data_product": "amv_research_index",
   "disclaimer": "研究辅助，不是投资建议。",
   "disclaimer_long": "这里的净值、仓位、图表只供自己复盘看，不是投资建议，也不保证以后还能这样。不会帮你下单，也不会要券商账号。",
-  "generated_at_utc": "2026-11-06T18:35:18Z",
+  "generated_at_utc": "2026-11-09T21:40:12Z",
   "index": {
     "key": "sector-rotation",
     "index_name_cn": "板块轮动对照",
@@ -21,13 +21,15 @@
     "amv_trusted_as_of": "2026-08-17",
     "amv_last_close": 212275.3,
     "amv_trusted_close": 212275.3,
-    "emotion_as_of": "2026-11-06",
-    "overlay_as_of": "2026-11-06",
+    "emotion_as_of": "2026-11-09",
+    "overlay_as_of": "2026-11-09",
     "amv_stale": true,
     "emotion_stale": false,
     "expected_update": "每个交易日晚上八点左右更新"
   },
-  "banners": [],
+  "banners": [
+    "人工智能ETF 在线拉取失败，改用本地缓存 index_sz159819_daily.csv：failed to fetch https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sz159819,day,2020-01-02,2020-12-31,2000,qfq: HTTP Error 501: Not Implemented"
+  ],
   "performance": {
     "latest_point": 4707.44192890699,
     "annualized_return": 0.26352909356787857,
